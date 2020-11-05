@@ -31,53 +31,66 @@
     <!-- start: page -->
     <div class="row">
         <div class="col-lg-12 col-xl-12">
-
-            <section class="card card-primary">
-                <header class="card-header">
-                    <div class="card-actions">
-                        <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
-                    </div>
-
-                    <h2 class="card-title">Form Tambah Jadwal</h2>
-                </header>
-                <div class="card-body">
-
-                    <?php if (!empty(session()->getFlashdata('sukses'))) { ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            <strong>Sukses!</strong> <?= session()->getFlashdata('sukses'); ?>
+            <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
+                  action="<?= base_url('dashboard/jadwal/create') ?>" class="form-horizontal">
+                <?= csrf_field() ?>
+                <section class="card card-primary">
+                    <header class="card-header">
+                        <div class="card-actions">
+                            <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
                         </div>
-                    <?php } ?>
 
-                    <?php if (!empty(session()->getFlashdata('gagal'))) { ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            <strong>Gagal!</strong> <?= session()->getFlashdata('gagal'); ?>
+                        <h2 class="card-title">Form Tambah Jadwal</h2>
+                    </header>
+                    <div class="card-body">
+
+                        <?php if (!empty(session()->getFlashdata('sukses'))) { ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Sukses!</strong> <?= session()->getFlashdata('sukses'); ?>
+                            </div>
+                        <?php } ?>
+
+                        <?php if (!empty(session()->getFlashdata('gagal'))) { ?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Gagal!</strong> <?= session()->getFlashdata('gagal'); ?>
+                            </div>
+                        <?php } ?>
+
+                        <?php if (!empty(session()->getFlashdata('ValidasiJadwal'))) { ?>
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Info!</strong> <?= session()->getFlashdata('ValidasiJadwal'); ?>
+                            </div>
+                        <?php } ?>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label text-sm-right pt-2">Pilih Petugas Kesehatan</label>
+                            <div class="col-sm-9">
+                                <?php $selected_petugas = old('idpetugas_fk') ? old('idpetugas_fk') : ''; ?>
+                                <select class="form-control select2 <?= ($validation->hasError('idpetugas_fk')) ? 'is-invalid' : '' ?>"
+                                        name="idpetugas_fk" id="idpetugas_fk">
+                                    <?php foreach ($dataPetugas as $x) : ?>
+                                        <option value="<?= ($x['id']) ?>" <?= ($x['id']) == $selected_petugas ? 'selected' : ''; ?>><?= $x['nama'] . ' [' . strtoupper($x['level']) . '] - ' . $x['nama_poli'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    <?= $validation->getError('idpetugas_fk'); ?>
+                                </div>
+                            </div>
                         </div>
-                    <?php } ?>
-
-                    <?php if (!empty(session()->getFlashdata('ValidasiJadwal'))) { ?>
-                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            <strong>Info!</strong> <?= session()->getFlashdata('ValidasiJadwal'); ?>
-                        </div>
-                    <?php } ?>
-
-                    <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
-                          action="<?= base_url('dashboard/jadwal/create') ?>">
-                        <?= csrf_field() ?>
 
 
-                        <div class="form-row">
-
-                            <div class="form-group col-md-3">
-                                <label>Hari</label>
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label text-sm-right pt-2">Hari</label>
+                            <div class="col-sm-9">
                                 <select name="hari" id="hari"
                                         class="form-control  <?= ($validation->hasError('hari')) ? 'is-invalid' : '' ?>">
                                     <?php
@@ -98,10 +111,11 @@
                                     <?= $validation->getError('hari'); ?>
                                 </div>
                             </div>
+                        </div>
 
-
-                            <div class="form-group col-md-3">
-                                <label>Mulai (Waktu)</label>
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label text-sm-right pt-2">Mulai (Waktu)</label>
+                            <div class="col-sm-9">
                                 <div class="input-group">
 														<span class="input-group-prepend">
 															<span class="input-group-text">
@@ -118,9 +132,11 @@
                                     <?= $validation->getError('dari'); ?>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group col-md-3">
-                                <label>Selesai (Waktu)</label>
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label text-sm-right pt-2">Selesai (Waktu)</label>
+                            <div class="col-sm-9">
                                 <div class="input-group">
 														<span class="input-group-prepend">
 															<span class="input-group-text">
@@ -137,9 +153,11 @@
                                     <?= $validation->getError('sampai'); ?>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group col-md-3">
-                                <label>Active</label>
+                        <div class="form-group row">
+                            <label class="col-sm-3 control-label text-sm-right pt-2">Active</label>
+                            <div class="col-sm-9">
                                 <?php $selected_active = old('active') ? old('active') : '1'; ?>
                                 <select name="active" id="active"
                                         class="form-control  <?= ($validation->hasError('active')) ? 'is-invalid' : '' ?>">
@@ -153,40 +171,22 @@
                                     <?= $validation->getError('active'); ?>
                                 </div>
                             </div>
-
                         </div>
 
 
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label>Pilih Petugas Kesehatan</label>
-                                <?php $selected_petugas = old('idpetugas_fk') ? old('idpetugas_fk') : ''; ?>
-                                <select class="form-control select2 <?= ($validation->hasError('idpetugas_fk')) ? 'is-invalid' : '' ?>"
-                                        name="idpetugas_fk" id="idpetugas_fk">
-                                    <?php foreach ($dataPetugas as $x) : ?>
-                                        <option value="<?= ($x['id']) ?>" <?= ($x['id']) == $selected_petugas ? 'selected' : ''; ?>><?= $x['nama'] . ' [' . strtoupper($x['level']) . '] - ' . $x['nama_poli'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('idpetugas_fk'); ?>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-row">
-                            <div class="col-md-12 text-right mt-3">
-                                <button class="btn btn-primary modal-confirm" type="submit"><i
+                    </div>
+                    <footer class="card-footer">
+                        <div class="row justify-content-end text-right">
+                            <div class="col-sm-12">
+                                <button class="btn btn-primary" type="submit"><i
                                             class="fa fa-save"></i>
                                     Simpan
                                 </button>
                             </div>
                         </div>
-
-                    </form>
-
-                </div>
-            </section>
+                    </footer>
+                </section>
+            </form>
         </div>
     </div>
     <!-- end: page -->
