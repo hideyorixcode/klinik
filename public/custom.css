@@ -1,0 +1,99 @@
+/*HIDEYORI STYLE*/
+th {
+	/*background-color: #f39c12;
+	color: white;
+	text-transform: uppercase;
+	font-size: 12px;
+	*/
+	text-transform: capitalize;
+	text-align: center;
+	vertical-align: middle;
+
+}
+
+
+tbody {
+	/*font-size: 12px;
+	text-transform: capitalize;
+	*/
+}
+
+table.dataTable tbody td {
+	vertical-align: middle;
+	/*word-break: break-word;*/
+}
+
+@media only screen and (max-device-width : 640px) {
+	/* Styles */
+	table.dataTable tbody td {
+		vertical-align: middle;
+		word-break: break-word;
+	}
+}
+
+th.dt-center, td.dt-center {
+	text-align: center;
+}
+
+.wrap_fix {
+	white-space: normal;
+}
+
+td.dt-right {
+	text-align: right;
+}
+
+
+.row_selected td {
+	background-color: black !important; /* Add !important to make sure override datables base styles */
+}
+
+.modal-body {
+	max-height: calc(110vh - 212px);
+	overflow-y: auto;
+}
+
+
+.sweet-alert {
+	z-index: 19060;
+}
+
+
+.fullscreen {
+	overflow: auto;
+}
+
+table.dataTable thead th {
+	vertical-align: middle;
+}
+
+table.dataTable tbody td {
+	vertical-align: middle;
+	/*white-space: normal;*/
+}
+/*table.dataTable.nowrap td {*/
+/*	white-space: normal;*/
+/*}*/
+
+
+
+tbody td.control {
+	background: url('../assets/img/details_open.png') no-repeat center center;
+	cursor: pointer;
+}
+
+tbody tr.parent td.control {
+	background: url('../assets/img/details_close.png') no-repeat center center;
+}
+
+.help-block {
+	color: #DC3545;
+	list-style: none;
+	font-size: 12px;
+	padding: 0;
+	margin-bottom: 0;
+}
+
+/*.control-label {*/
+/*	*/
+/*}*/
