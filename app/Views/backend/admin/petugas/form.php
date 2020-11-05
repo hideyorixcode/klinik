@@ -5,6 +5,7 @@
       href="<?= base_url('public/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css') ?>"/>
 <link rel="stylesheet" href="<?= base_url('public/assets/vendor/summernote/summernote-bs4.css') ?>"/>
 <link rel="stylesheet" href="<?= base_url('public/assets/vendor/select2/css/select2.css') ?>"/>
+<link rel="stylesheet" href="<?= base_url('public/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css')?>" />
 
 <?= $this->endSection(); ?>
 <!-- end css -->

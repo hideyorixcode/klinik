@@ -254,7 +254,7 @@ class JadwalController extends BaseController
             $data_log = [
                 //'log_time' => $timestamp,
                 'log_id_user' => decodeHash($this->dataGlobal['sesi_id']),
-                'log_description' => $this->dataGlobal['sesi_username'] . ' menghapus data Jadwal ' . $data_master["hari"] . ', ' . $data_master["waktu"] . ' - ' . $data_master["nama_petugas"],
+                'log_description' => $this->dataGlobal['sesi_username'] . ' menghapus data Jadwal ' . $data_master["hari"] . ', ' . $data_master["dari"] . ' - ' . $data_master["sampai"].' ['.$data_master["nama_petugas"].']',
             ];
             $this->mlog->insert($data_log);
             $this->mjadwal->delete(decodeHash($id));
@@ -285,7 +285,7 @@ class JadwalController extends BaseController
                 $data_log = [
                     //'log_time' => $timestamp,
                     'log_id_user' => ($this->dataGlobal['sesi_id_decode']),
-                    'log_description' => $this->dataGlobal['sesi_username'] . ' menghapus data Jadwal ' . $data["hari"] . ', ' . $data["waktu"] . ' - ' . $data["nama_petugas"],
+                    'log_description' => $this->dataGlobal['sesi_username'] . ' menghapus data Jadwal ' . $data["hari"] . ', ' . $data["dari"] . '-' . $data["sampai"].' ['.$data["nama_petugas"].']',
                 ];
                 $this->mlog->insert($data_log);
                 $this->mjadwal->delete(decodeHash($id));
@@ -319,7 +319,7 @@ class JadwalController extends BaseController
                 ];
                 $data_log = [
                     'log_id_user' => ($this->dataGlobal['sesi_id_decode']),
-                    'log_description' => $this->dataGlobal['sesi_username'] . ' ' . $statunyani . ' ' . $data["hari"] . ', ' . $data["waktu"] . ' - ' . $data["nama_petugas"],
+                    'log_description' => $this->dataGlobal['sesi_username'] . ' ' . $statunyani . ' ' . $data["hari"] . ', ' . $data["dari"] . '-' . $data["sampai"]. ' ['.$data["nama_petugas"].']',
                 ];
                 $this->mlog->insert($data_log);
                 $this->mjadwal->update(decodeHash($id), $dataUpdate);
