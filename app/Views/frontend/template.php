@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="sidebar-left-big-icons">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <title> <?= $judul ?></title>
@@ -16,13 +16,9 @@
 <body>
 <section class="body">
     <!-- Topbar Start -->
-    <?= $this->include('backend/header'); ?>
+    <?= $this->include('frontend/header'); ?>
     <!-- end Topbar -->
     <div class="inner-wrapper">
-        <!-- ========== Left Sidebar Start ========== -->
-        <?= $this->include('backend/sidebar'); ?>
-        <!-- Left Sidebar End -->
-
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
         <?= $this->renderSection('content'); ?>

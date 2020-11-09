@@ -8,13 +8,13 @@
     <li class="<?= getSegment(2) == 'poli' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard/poli') ?>">
             <i class="fas fa-clinic-medical" aria-hidden="true"></i>
-            <span>Data Poli</span>
+            <span>Poli</span>
         </a>
     </li>
     <li class="<?= getSegment(2) == 'petugas' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard/petugas') ?>">
             <i class="fas fa-user-md" aria-hidden="true"></i>
-            <span>Data Petugas Kesehatan</span>
+            <span>Petugas Kesehatan</span>
         </a>
     </li>
     <li class="<?= getSegment(2) == 'jadwal' ? 'nav-active' : ''; ?>">
@@ -26,7 +26,7 @@
     <li class="<?= getSegment(2) == 'pengguna' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard/pengguna') ?>">
             <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
-            <span>Data Pengguna</span>
+            <span>Pengguna</span>
         </a>
     </li>
     <li class="<?= getSegment(2) == 'log' ? 'nav-active' : ''; ?>">

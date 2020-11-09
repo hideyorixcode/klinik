@@ -14,10 +14,10 @@ class HomeController extends BaseController
     public function index()
     {
         $data = [
-            'judul' => 'Halaman Kosong',
+            'judul' => 'Beranda',
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/blank', $data);
+        return view('frontend/blank', $data);
     }
 
     public function profil()
@@ -257,6 +257,207 @@ class HomeController extends BaseController
         } else {
             echo 'File Delete Failed';
         }
+    }
+
+    public function infojadwal()
+    {
+        $data = [
+            'judul' => 'Daftar Jadwal',
+            'dataPetugas' => $this->viewpengguna->whereIn('level', ['dokter', 'bidan'])->where('active', 1)->find(),
+            'dataPoli' => $this->mpoli->where('active', 1)->find()
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/jadwal', $data);
+    }
+
+    public function read_jadwal()
+    {
+        $mjadwal = $this->viewjadwal;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mjadwal->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->hari;
+                $row[] = $list->dari . '-' . $list->sampai;
+                $row[] = '<a href="' . base_url('detail-petugas/' . encodeHash($list->idpetugas_fk)) . '">' . $list->nama_petugas . '</a>';
+                $row[] = $list->nama_poli;
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
+                $row[] = '<a href="' . base_url('detail-jadwal/' . encodeHash($list->id_jadwal)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"> Detail Jadwal</span></a>';
+                $row[] = '';
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mjadwal->count_all(),
+                "recordsFiltered" => $mjadwal->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function detail_jadwal($id)
+    {
+        $data = [
+            'judul' => 'Detail Jadwal',
+            'dataMaster' => $this->viewjadwal->where('id_jadwal', decodeHash($id))->first(),
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/detail_jadwal', $data);
+    }
+
+    public function detail_petugas($id)
+    {
+        $data = [
+            'judul' => 'Detail Petugas Kesehatan',
+            'dataMaster' => $this->viewpengguna->where('id', decodeHash($id))->first(),
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/detail_petugas', $data);
+    }
+
+    public function daftar()
+    {
+        $data = [
+            'judul' => 'Daftar Pasien',
+            'validation' => $this->form_validation,
+            'dataPoli' => $this->mpoli->where('active', 1)->find()
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/daftar', $data);
+    }
+
+    public function createPasien()
+    {
+        $nama = $this->request->getPost('nama');
+        $username = $this->request->getPost('username');
+        $notelepon = $this->request->getPost('notelepon');
+        $email = strtolower($this->request->getPost('email'));
+        $password = $this->request->getPost('password');
+        $alamat = $this->request->getPost('alamat');
+        $jk = $this->request->getPost('jk');
+        $deskripsi = $this->request->getPost('deskripsi');
+        $tgl_lahir = ubahformatTgl($this->request->getPost('tgl_lahir'));
+        $active = 1;
+        $level = 'pasien';
+
+        $rules = [
+            'jk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Jenis Kelamin'
+                ]
+            ],
+            'tgl_lahir' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Tanggal Lahir harus dipilih'
+                ]
+            ],
+            'nama' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'nama pengguna harus diisi.'
+                ]
+            ],
+
+            'username' => [
+                'rules' => 'required|is_unique[pengguna.username]',
+                'errors' => [
+                    'required' => 'username wajib diisi dan tidak boleh kosong',
+                    'is_unique' => 'username telah digunakan',
+                ],
+            ],
+
+            'password' => [
+                'rules' => 'min_length[6]',
+                'errors' => [
+                    'min_length' => 'minimal 6 karakter',
+                ],
+            ],
+            'confirm_password' => [
+                'rules' => 'matches[password]',
+                'errors' => [
+                    'matches' => 'Konfirmasi password harus sama',
+                ],
+            ],
+            'email' => [
+                'rules' => 'required|valid_email|is_unique[pengguna.email]',
+                'errors' => [
+                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
+                    'is_unique' => 'email telah digunakan',
+                    'valid_email' => 'Email yang anda input tidak valid',
+                ],
+            ],
+        ];
+
+        if (!empty($_FILES['avatar']['name'])) {
+            $rules += [
+                'avatar' => [
+                    'rules' => 'ext_in[avatar,png,jpg,gif,JPG,jpeg,JPEG]|max_size[avatar,1024]',
+                    'errors' => [
+                        'ext_in' => 'Tipe File Berupa Gambar',
+                        'max_size' => 'Ukuran Maksimal avatar / Foto 1 MB',
+                    ],
+                ],
+            ];
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('daftar'))->withInput();
+        } else {
+            $avatar = $this->request->getFile('avatar');
+            if ($avatar->getError() == 4) {
+                $avatarName = '';
+            } else {
+                $avatar = $this->request->getFile('avatar');
+                $avatarName = $avatar->getRandomName();
+                $avatar->move(ROOTPATH . 'public/uploads/', $avatarName);;
+                if (!is_dir('public/uploads/thumbs')) {
+                    mkdir('public/uploads/thumbs', 0777, TRUE);
+                }
+                $image = \Config\Services::image()
+                    ->withFile('public/uploads/' . $avatarName)
+                    ->fit(100, 100, 'center')
+                    ->save('public/uploads/thumbs/' . $avatarName);
+            }
+            $data = [
+                'nama' => $nama,
+                'email' => $email,
+                'username' => $username,
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'active' => $active,
+                'notelepon' => $notelepon,
+                'level' => $level,
+                'avatar' => $avatarName,
+                'deskripsi' => $deskripsi,
+                'jk' => $jk,
+                'tgl_lahir' => $tgl_lahir,
+                'alamat' => $alamat
+            ];
+        }
+        //simpan
+        $insert = $this->mpengguna->insert($data);
+        if ($insert) {
+            $timestamp = date("Y-m-d H:i:s");
+            $data_log = [
+                'log_time' => $timestamp,
+                'log_id_user' => $insert,
+                'log_description' => $username . ' Berhasil Registrasi sebagai pasien',
+            ];
+            $this->mlog->insert($data_log);
+            session()->setFlashdata('sukses', 'Berhasil Registrasi Pasien, silahkan ke  <a href="' . base_url('syslog') . '"> Halaman Login </a>');
+            return redirect()->to(base_url('daftar'));
+
+        } else {
+            session()->setFlashdata('gagal', 'Gagal Registrasi');
+            return redirect()->to(base_url('daftar'));
+        }
+
     }
 
 }

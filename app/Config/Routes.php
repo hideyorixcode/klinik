@@ -23,7 +23,14 @@ $routes->set404Override();
 //    return view('backend/404');
 //});
 $routes->setAutoRoute(true);
-
+$routes->get('/', 'HomeController::index');
+$routes->get('blank', 'HomeController::blank');
+$routes->get('daftar', 'HomeController::daftar');
+$routes->post('daftar-pasien', 'HomeController::createPasien');
+$routes->get('jadwal', 'HomeController::infojadwal');
+$routes->post('read-jadwal', 'HomeController::read_jadwal');
+$routes->get('detail-jadwal/(:any)', 'HomeController::detail_jadwal/$1');
+$routes->get('detail-petugas/(:any)', 'HomeController::detail_petugas/$1');
 /**
  * --------------------------------------------------------------------
  * Route Definitions
@@ -34,8 +41,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 //$routes->get('/', 'HomeController::index_front');
 $routes->group('dashboard', ['filter' => 'ceklogin'], function ($routes) {
-    $routes->get('/', 'HomeController::index');
-    $routes->get('blank', 'HomeController::blank');
+
     $routes->get('profil', 'HomeController::profil');
     $routes->get('ubah-profil', 'HomeController::ubah_profil');
     $routes->post('update-profil', 'HomeController::update_profil');

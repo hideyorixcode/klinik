@@ -207,7 +207,14 @@
     var token = "<?=csrf_hash()?>";
     $(document).ready(function () {
 
-        $('.select2').select2();
+        $('.select2').select2({
+            width: '100%',
+            height: '100%'
+        });
+
+        $(window).resize(function () {
+            $('.select2').css('width', "100%");
+        });
 
 
     });

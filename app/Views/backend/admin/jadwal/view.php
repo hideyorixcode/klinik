@@ -111,10 +111,10 @@
                             <th width="5%">No.</th>
                             <th width="10%">Hari</th>
                             <th width="20%">Waktu</th>
-                            <th width="25%">Nama Petugas</th>
+                            <th width="20%">Nama Petugas</th>
                             <th width="20%">Poli</th>
                             <th width="5%">Active</th>
-                            <th width="w0%">Options</th>
+                            <th width="15%">Options</th>
                             <th width="5%"></th>
                         </tr>
                         </thead>
@@ -183,7 +183,14 @@
     var base_url = '<?=base_url();?>';
 
     $(document).ready(function () {
-        $('.select2').select2();
+        $('.select2').select2({
+            width: '100%',
+            height: '100%'
+        });
+
+        $(window).resize(function () {
+            $('.select2').css('width', "100%");
+        });
         // initialize datatable
         table = $('#hideyori_datatable').dataTable({
             "processing": true,
