@@ -10,7 +10,7 @@ class PenggunaModel extends Model
     protected $table = "pengguna";
     protected $view = "vpengguna";
     protected $primaryKey = 'id';
-    protected $allowedFields = ['username', 'nama', 'password', 'notelepon', 'avatar', 'email', 'active', 'level', 'id_poli_fk','alamat','jk','tgl_lahir', 'deskripsi', 'created_at', 'updated_at'];
+    protected $allowedFields = ['username', 'nama', 'password', 'notelepon', 'avatar', 'email', 'active', 'level', 'id_poli_fk', 'alamat', 'jk', 'tgl_lahir', 'deskripsi', 'gol_darah', 'tinggi_badan', 'berat_badan', 'bpjs', 'created_at', 'updated_at'];
     protected $request;
     protected $db;
     protected $dt;

@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Tanggal Lahir</label>
-                                        <input type="tgl_lahir"
+                                        <input type="text"
                                                class="form-control tanggal <?= ($validation->hasError('tgl_lahir')) ? 'is-invalid' : '' ?>"
                                                id="tgl_lahir" name="tgl_lahir" placeholder="Tanggal Lahir"
                                                value="<?= old('tgl_lahir') ? old('tgl_lahir') : '' ?>">
@@ -181,6 +181,70 @@
                                     <textarea name="deskripsi" class="form-control" rows="3"
                                               id="summernote"><?= old('deskripsi') ? old('deskripsi') : '' ?></textarea>
                                     <p style="color: red"><?= $validation->getError('deskripsi'); ?></p>
+
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>Golongan Darah</label>
+                                        <select name="gol_darah" id="gol_darah"
+                                                class="form-control  <?= ($validation->hasError('gol_darah')) ? 'is-invalid' : ''; ?>">
+                                            <?php
+                                            $x = 0;
+                                            $selected_goldar = old('gol_darah') ? old('gol_darah') : '';
+                                            while ($x < count(enumValues('pengguna', 'gol_darah'))) {
+                                                $stringgol = enumValues('pengguna', 'gol_darah')[$x];
+                                                ?>
+                                                <option <?= $selected_goldar == $stringjk ? 'selected' : ''; ?>
+                                                        value="<?= $stringgol ?>">
+                                                    <?= strtoupper($stringgol) ?></option>
+                                                <?php
+                                                $x++;
+                                            }
+                                            ?>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('stringgol'); ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Tinggi Badan (cm)</label>
+                                        <input type="number"
+                                               class="form-control <?= ($validation->hasError('tinggi_badan')) ? 'is-invalid' : ''; ?>"
+                                               id="tinggi_badan" name="tinggi_badan" placeholder="Tinggi Badan"
+                                               value="<?= old('tinggi_badan') ? old('tinggi_badan') : '' ?>">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('tinggi_badan'); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label>Berat Badan (kg)</label>
+                                        <input type="number"
+                                               class="form-control <?= ($validation->hasError('tinggi_badan')) ? 'is-invalid' : ''; ?>"
+                                               id="berat_badan" name="berat_badan" placeholder="Berat Badan"
+                                               value="<?= old('berat_badan') ? old('berat_badan') : '' ?>">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('berat_badan'); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label>Pasien BPJS</label>
+                                        <?php $selected_bpjs = old('bpjs') ? old('bpjs') : ''; ?>
+                                        <select name="bpjs" id="bpjs"
+                                                class="form-control  <?= ($validation->hasError('bpjs')) ? 'is-invalid' : '' ?>">
+                                            <option <?= $selected_bpjs == 'YA' ? 'selected' : ''; ?> value="YA">
+                                                YA
+                                            </option>
+                                            <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">
+                                                TIDAK
+                                            </option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('bpjs'); ?>
+                                        </div>
+                                    </div>
 
                                 </div>
 

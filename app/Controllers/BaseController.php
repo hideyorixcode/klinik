@@ -22,6 +22,7 @@ use App\Models\KonfigurasiModel;
 use App\Models\PenggunaModel;
 use App\Models\LogModel;
 use App\Models\viewdb\VJadwalModel;
+use App\Models\viewdb\VPasienModel;
 use App\Models\viewdb\VPenggunaModel;
 use CodeIgniter\Controller;
 use Config\Services;
@@ -56,6 +57,7 @@ class BaseController extends Controller
         $this->mlog = new LogModel($this->reqService);
         $this->mpengguna = new PenggunaModel($this->reqService);
         $this->viewpengguna = new VPenggunaModel();
+        $this->viewpasien = new VPasienModel($this->reqService);
         $this->mpoli = new PoliModel($this->reqService);
 
         $this->mjadwal = new JadwalModel();

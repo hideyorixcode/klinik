@@ -72,6 +72,18 @@ $routes->group('dashboard', ['filter' => 'ceklogin'], function ($routes) {
         $routes->post('bulk_status', 'PoliController::bulk_status');
     });
 
+    $routes->group('pasien', ['filter' => 'cekloginAdmin'], function ($routes) {
+        $routes->get('/', 'PasienController::index');
+        $routes->post('read', 'PasienController::read');
+        $routes->post('create', 'PasienController::create');
+        $routes->get('edit/(:any)', 'PasienController::edit/$1');
+        $routes->get('detail/(:any)', 'PasienController::detail/$1');
+        $routes->post('update', 'PasienController::update');
+        $routes->get('delete/(:any)', 'PasienController::delete/$1');
+        $routes->post('bulk_delete', 'PasienController::bulk_delete');
+        $routes->post('bulk_status', 'PasienController::bulk_status');
+    });
+
     $routes->group('jadwal', ['filter' => 'cekloginAdmin'], function ($routes) {
         $routes->get('/', 'JadwalController::index');
         $routes->post('read', 'JadwalController::read');

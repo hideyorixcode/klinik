@@ -39,7 +39,7 @@
                         <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
                     </div>
 
-                    <h2 class="card-title">Form Ubah Petugas Kesehatan</h2>
+                    <h2 class="card-title">Form Ubah Data Pasien</h2>
                 </header>
                 <div class="card-body">
 
@@ -62,7 +62,7 @@
                     <?php } ?>
 
                     <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
-                          action="<?= base_url('dashboard/petugas/update') ?>">
+                          action="<?= base_url('dashboard/pasien/update') ?>">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" id="id" value="<?= $id; ?>">
                         <div class="form-group">
@@ -89,35 +89,6 @@
 
                         <div class="form-row">
 
-                            <div class="form-group col-md-6">
-                                <label>Jenis Petugas</label>
-                                <?php $selected_petugas = old('level') ? old('level') : $dataMaster['level']; ?>
-                                <select name="level" id="level"
-                                        class="form-control  <?= ($validation->hasError('level')) ? 'is-invalid' : '' ?>">
-                                    <option <?= $selected_petugas == 'dokter' ? 'selected' : ''; ?> value="dokter">
-                                        DOKTER
-                                    </option>
-                                    <option <?= $selected_petugas == 'bidan' ? 'selected' : ''; ?> value="bidan">BIDAN
-                                    </option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('level'); ?>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label>Pilih Poli</label>
-                                <?php $selected_poli = old('id_poli_fk') ? old('id_poli_fk') : $dataMaster['id_poli_fk'];; ?>
-                                <select class="form-control select2" name="id_poli_fk" id="id_poli_fk"
-                                        class="form-control  <?= ($validation->hasError('id_poli_fk')) ? 'is-invalid' : '' ?>">
-                                    <?php foreach ($dataPoli as $x) : ?>
-                                        <option value="<?= ($x['id_poli']) ?>" <?= ($x['id_poli']) == $selected_poli ? 'selected' : ''; ?>><?= $x['nama_poli'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('id_poli_fk'); ?>
-                                </div>
-                            </div>
 
                             <div class="form-group col-md-6">
                                 <label>Email</label>
@@ -204,13 +175,77 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Deskripsi Petugas Kesehatan</label>
+                                <label>Deskripsi Pasien</label>
 
                                 <textarea name="deskripsi"
                                           id="summernote"><?= old('deskripsi') ? old('deskripsi') : $dataMaster['deskripsi']; ?></textarea>
                                 <p style="color: red"><?= $validation->getError('deskripsi'); ?></p>
 
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Golongan Darah</label>
+                                    <select name="gol_darah" id="gol_darah"
+                                            class="form-control  <?= ($validation->hasError('gol_darah')) ? 'is-invalid' : ''; ?>">
+                                        <?php
+                                        $x = 0;
+                                        $selected_goldar = old('gol_darah') ? old('gol_darah') : $dataMaster['gol_darah'];
+                                        while ($x < count(enumValues('pengguna', 'gol_darah'))) {
+                                            $stringgol = enumValues('pengguna', 'gol_darah')[$x];
+                                            ?>
+                                            <option <?= $selected_goldar == $stringgol ? 'selected' : ''; ?>
+                                                    value="<?= $stringgol ?>">
+                                                <?= strtoupper($stringgol) ?></option>
+                                            <?php
+                                            $x++;
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= $validation->getError('stringgol'); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Tinggi Badan (cm)</label>
+                                    <input type="number"
+                                           class="form-control <?= ($validation->hasError('tinggi_badan')) ? 'is-invalid' : ''; ?>"
+                                           id="tinggi_badan" name="tinggi_badan" placeholder="Tinggi Badan"
+                                           value="<?= old('tinggi_badan') ? old('tinggi_badan') : $dataMaster['tinggi_badan'] ?>">
+                                    <div class="invalid-feedback">
+                                        <?= $validation->getError('tinggi_badan'); ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Berat Badan (kg)</label>
+                                    <input type="number"
+                                           class="form-control <?= ($validation->hasError('tinggi_badan')) ? 'is-invalid' : ''; ?>"
+                                           id="berat_badan" name="berat_badan" placeholder="Berat Badan"
+                                           value="<?= old('berat_badan') ? old('berat_badan') : $dataMaster['berat_badan'] ?>">
+                                    <div class="invalid-feedback">
+                                        <?= $validation->getError('berat_badan'); ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Pasien BPJS</label>
+                                    <?php $selected_bpjs = old('bpjs') ? old('bpjs') : $dataMaster['bpjs']; ?>
+                                    <select name="bpjs" id="bpjs"
+                                            class="form-control  <?= ($validation->hasError('bpjs')) ? 'is-invalid' : '' ?>">
+                                        <option <?= $selected_bpjs == 'YA' ? 'selected' : ''; ?> value="YA">
+                                            YA
+                                        </option>
+                                        <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">TIDAK
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= $validation->getError('bpjs'); ?>
+                                    </div>
+                                </div>
+
+                            </div>
+
 
                             <hr class="dotted tall">
 

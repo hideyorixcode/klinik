@@ -344,6 +344,10 @@ class HomeController extends BaseController
         $tgl_lahir = ubahformatTgl($this->request->getPost('tgl_lahir'));
         $active = 1;
         $level = 'pasien';
+        $gol_darah = $this->request->getPost('gol_darah');
+        $tinggi_badan = $this->request->getPost('tinggi_badan');
+        $berat_badan = $this->request->getPost('berat_badan');
+        $bpjs = $this->request->getPost('bpjs');
 
         $rules = [
             'jk' => [
@@ -393,6 +397,31 @@ class HomeController extends BaseController
                     'valid_email' => 'Email yang anda input tidak valid',
                 ],
             ],
+
+            'gol_darah' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Gol Darah'
+                ]
+            ],
+            'tinggi_badan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Masukkan tinggi badan anda (cm)'
+                ]
+            ],
+            'berat_badan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Masukkan berat badan anda (kg)'
+                ]
+            ],
+            'bpjs' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'pilih tidak jika tidak menggunakan kartu BPJS'
+                ]
+            ],
         ];
 
         if (!empty($_FILES['avatar']['name'])) {
@@ -437,7 +466,11 @@ class HomeController extends BaseController
                 'deskripsi' => $deskripsi,
                 'jk' => $jk,
                 'tgl_lahir' => $tgl_lahir,
-                'alamat' => $alamat
+                'alamat' => $alamat,
+                'gol_darah' => $gol_darah,
+                'tinggi_badan' => $tinggi_badan,
+                'berat_badan' => $berat_badan,
+                'bpjs' => $bpjs
             ];
         }
         //simpan

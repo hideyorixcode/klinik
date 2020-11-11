@@ -5,6 +5,12 @@
             <span>Dashboard</span>
         </a>
     </li>
+    <li class="<?= getSegment(2) == 'pasien' ? 'nav-active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('dashboard/pasien') ?>">
+            <i class="fas fa-diagnoses" aria-hidden="true"></i>
+            <span>Pasien</span>
+        </a>
+    </li>
     <li class="<?= getSegment(2) == 'poli' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard/poli') ?>">
             <i class="fas fa-clinic-medical" aria-hidden="true"></i>
