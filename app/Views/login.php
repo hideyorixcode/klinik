@@ -111,13 +111,14 @@
                             <span>atau</span>
                         </span>
 
-                        <p class="text-center">Belum memiliki akun pasien? <a href="#">Daftar!</a></p>
+                        <p class="text-center">Belum memiliki akun pasien? <a
+                                    href="<?= base_url('daftar') ?>">Daftar!</a></p>
 
                     </form>
                 </div>
             </div>
 
-            <p class="text-center text-muted mt-3 mb-3">&copy; Copyright <?=date('Y')?>. <?=$nama_app; ?>.</p>
+            <p class="text-center text-muted mt-3 mb-3">&copy; Copyright <?= date('Y') ?>. <?= $nama_app; ?>.</p>
         </div>
     </section>
     <!-- end: page -->

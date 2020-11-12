@@ -11,6 +11,7 @@ class Filters extends BaseConfig
         'toolbar' => \CodeIgniter\Filters\DebugToolbar::class,
         'honeypot' => \CodeIgniter\Filters\Honeypot::class,
         'ceklogin' => \App\Filters\LoginFilter::class,
+        'cekloginLevel' => \App\Filters\LoginFilterLevel::class,
         'cekloginAdmin' => \App\Filters\LoginFilterAdmin::class,
     ];
 

@@ -10,7 +10,6 @@ class HomeController extends BaseController
     }
 
 
-
     public function index()
     {
         $data = [
@@ -29,7 +28,12 @@ class HomeController extends BaseController
             'sesi_deskripsi' => $this->mpengguna->where('id', $id_profil)->first()['deskripsi']
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/profil', $data);
+        if ($this->dataGlobal['sesi_level'] == 'pasien') {
+            return view('frontend/profil', $data);
+        } else {
+            return view('backend/profil', $data);
+        }
+
     }
 
     public function update_profil()
@@ -200,6 +204,211 @@ class HomeController extends BaseController
             } else {
                 session()->setFlashdata('gagal', 'Gagal Ubah Data Profil');
                 return redirect()->to(base_url('dashboard/profil'));
+            }
+        }
+
+    }
+
+    public function update_profil_pasien()
+    {
+        //inisiasi variabel
+        //,,,,, avatar
+        $id = decodeHash($this->request->getPost('id'));
+        $nama = $this->request->getPost('nama');
+        $username = $this->request->getPost('username');
+        $notelepon = $this->request->getPost('notelepon');
+        $email = strtolower($this->request->getPost('email'));
+        $data_pengguna = $this->read_by_id($id);
+        $username_lama = $data_pengguna['username'];
+        $email_lama = $data_pengguna['email'];
+        $password_baru = $this->request->getPost('password');
+        $alamat = $this->request->getPost('alamat');
+        $jk = $this->request->getPost('jk');
+        $deskripsi = $this->request->getPost('deskripsi');
+        $tgl_lahir = ubahformatTgl($this->request->getPost('tgl_lahir'));
+        $gol_darah = $this->request->getPost('gol_darah');
+        $tinggi_badan = $this->request->getPost('tinggi_badan');
+        $berat_badan = $this->request->getPost('berat_badan');
+        $bpjs = $this->request->getPost('bpjs');
+        //validasi
+        $rules = [
+            'jk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Jenis Kelamin'
+                ]
+            ],
+            'tgl_lahir' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Tanggal Lahir harus dipilih'
+                ]
+            ],
+            'nama' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'nama pengguna harus diisi.'
+                ]
+            ],
+            'gol_darah' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Gol Darah'
+                ]
+            ],
+            'tinggi_badan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Masukkan tinggi badan anda (cm)'
+                ]
+            ],
+            'berat_badan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Masukkan berat badan anda (kg)'
+                ]
+            ],
+            'bpjs' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'pilih tidak jika tidak menggunakan kartu BPJS'
+                ]
+            ],
+        ];
+
+        if ($username != $username_lama) {
+            $rules += [
+                'username' => [
+                    'rules' => 'required|is_unique[pengguna.username]',
+                    'errors' => [
+                        'required' => 'username wajib diisi dan tidak boleh kosong',
+                        'is_unique' => 'username telah digunakan'
+                    ]
+                ],
+
+            ];
+        }
+
+        if ($email != $email_lama) {
+            $rules += [
+                'email' => [
+                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+                    'errors' => [
+                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+                        'is_unique' => 'email telah digunakan',
+                        'valid_email' => 'Email yang anda input tidak valid'
+                    ]
+                ],
+
+            ];
+        }
+
+
+        if (!empty($password_baru)) {
+            //validasi
+            $rules += [
+                'password' => [
+                    'rules' => 'required|min_length[6]',
+                    'errors' => [
+                        'required' => 'password harus diisi',
+                        'min_length' => 'minimal 6 karakter'
+                    ]
+                ],
+                'confirm_password' => [
+                    'rules' => 'matches[password]',
+                    'errors' => [
+                        'matches' => 'Konfirmasi password harus sama'
+                    ]
+                ],
+
+            ];
+        }
+
+        if (!empty($_FILES['avatar']['name'])) {
+            $rules += [
+                'avatar' => [
+                    'rules' => 'max_size[avatar,1024]|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png]',
+                    'errors' => [
+                        'max_size' => 'Ukuran Maksimal Gambar 1 MB',
+                        'is_image' => 'yang anda piih bukan gambar',
+                        'mime_in' => 'yang anda piih bukan gambar',
+                    ]
+                ],
+            ];
+        }
+
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('dashboard/profil'))->withInput();
+
+        } else {
+            $avatar = $this->request->getFile('avatar');
+            if ($avatar->getError() == 4) {
+                $remove_avatar = $this->request->getPost('remove_avatar');
+                if ($remove_avatar) // if remove foto checked
+                {
+                    if (file_exists('public/uploads/' . $remove_avatar) && $remove_avatar)
+                        unlink('public/uploads/' . $remove_avatar);
+                    if (file_exists('public/uploads/thumbs/' . $remove_avatar) && $remove_avatar)
+                        unlink('public/uploads/thumbs/' . $remove_avatar);
+                    $avatarName = '';
+                } else {
+                    $avatarName = $data_pengguna["avatar"];
+                }
+            } else {
+                if (file_exists('public/uploads/' . $data_pengguna["avatar"]) && $data_pengguna["avatar"])
+                    unlink('public/uploads/' . $data_pengguna["avatar"]);
+                if (file_exists('public/uploads/thumbs/' . $data_pengguna["avatar"]) && $data_pengguna["avatar"])
+                    unlink('public/uploads/thumbs/' . $data_pengguna["avatar"]);
+                $avatarName = $avatar->getRandomName();
+                $avatar->move(ROOTPATH . 'public/uploads/', $avatarName);
+                if (!is_dir('public/uploads/thumbs')) {
+                    mkdir('public/uploads/thumbs', 0777, TRUE);
+                }
+                $image = \Config\Services::image()
+                    ->withFile('public/uploads/' . $avatarName)
+                    ->fit(100, 100, 'center')
+                    ->save('public/uploads/thumbs/' . $avatarName);
+            }
+
+            $data = [
+                'username' => $username,
+                'email' => $email,
+                'nama' => $nama,
+                'notelepon' => $notelepon,
+                'jk' => $jk,
+                'tgl_lahir' => $tgl_lahir,
+                'alamat' => $alamat,
+                'deskripsi' => $deskripsi,
+                'avatar' => $avatarName,
+                'gol_darah' => $gol_darah,
+                'tinggi_badan' => $tinggi_badan,
+                'berat_badan' => $berat_badan,
+                'bpjs' => $bpjs
+            ];
+
+            if ($password_baru != '') {
+                $data += [
+                    'password' => password_hash($password_baru, PASSWORD_BCRYPT),
+                ];
+            }
+
+
+            $update = $this->mpengguna->update($id, $data);
+            if ($update) {
+                $timestamp = date("Y-m-d H:i:s");
+                $data_log = [
+                    'log_time' => $timestamp,
+                    'log_id' => $id,
+                    'log_description' => $this->dataGlobal['sesi_username'] . ' merubah data pribadi',
+                ];
+                $this->mlog->insert($data_log);
+                session()->setFlashdata('sukses', 'Berhasil Ubah Data Profil');
+                return redirect()->to(base_url('profil'));
+
+            } else {
+                session()->setFlashdata('gagal', 'Gagal Ubah Data Profil');
+                return redirect()->to(base_url('profil'));
             }
         }
 
@@ -491,6 +700,34 @@ class HomeController extends BaseController
             return redirect()->to(base_url('daftar'));
         }
 
+    }
+
+    public function dashboard()
+    {
+        $data = [
+            'judul' => 'Beranda',
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('backend/blank', $data);
+    }
+
+    public function layanan()
+    {
+        $data = [
+            'judul' => 'Layanan Klinik',
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/layanan', $data);
+    }
+
+    public function daftar_layanan()
+    {
+        $data = [
+            'judul' => 'Daftar Antrian dan Pilih Layanan',
+            'validation' => $this->form_validation,
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/daftar_layanan', $data);
     }
 
 }

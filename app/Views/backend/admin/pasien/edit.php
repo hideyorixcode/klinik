@@ -396,7 +396,7 @@
         data.append("image", image);
         data.append('<?=csrf_token()?>', token);
         $.ajax({
-            url: "<?php echo site_url('dashboard/upload-image') ?>",
+            url: "<?php echo site_url('upload-image') ?>",
             cache: false,
             contentType: false,
             processData: false,
@@ -426,7 +426,7 @@
                 '<?=csrf_token()?>': token
             },
             type: "POST",
-            url: "<?php echo site_url('dashboard/delete-image') ?>",
+            url: "<?php echo site_url('delete-image') ?>",
             cache: false,
             success: function (response) {
                 //console.log(response);

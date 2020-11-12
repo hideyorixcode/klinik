@@ -27,8 +27,13 @@
                                 <span>Informasi Jadwal Klinik</span>
                             </a>
                         </li>
-                        <?php if (session()->get('id')) : ?>
-
+                        <?php if (session()->get('level') == 'pasien') : ?>
+                            <li class="<?= getSegment(1) == 'layanan' ? 'active' : ''; ?>">
+                                <a class="nav-link" href="<?= base_url('layanan') ?>">
+                                    <i class="fas fa-reply" aria-hidden="true"></i>
+                                    <span>Layanan</span>
+                                </a>
+                            </li>
                         <?php else : ?>
                             <li class="<?= getSegment(1) == 'daftar' ? 'active' : ''; ?>">
                                 <a class="nav-link" href="<?= base_url('daftar') ?>">
@@ -38,12 +43,25 @@
                             </li>
 
 
+                        <?php endif; ?>
+
+
+                        <?php if (!session('id')) : ?>
                             <li class="<?= getSegment(1) == 'syslog' ? 'active' : ''; ?>">
                                 <a class="nav-link" href="<?= base_url('syslog') ?>">
                                     <i class="fas fa-lock" aria-hidden="true"></i>
                                     <span>Login</span>
                                 </a>
                             </li>
+                        <?php else : ?>
+                            <?php if (session()->get('level') != 'pasien') : ?>
+                                <li class="<?= getSegment(1) == 'dashboard' ? 'active' : ''; ?>">
+                                    <a class="nav-link" href="<?= base_url('dashboard') ?>">
+                                        <i class="fas fa-backward" aria-hidden="true"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         <?php endif; ?>
 
                     </ul>
@@ -54,7 +72,7 @@
     </div>
 
     <!-- start: search & user box -->
-    <?php if (session()->get('id')) : ?>
+    <?php if (session()->get('level') == 'pasien') : ?>
         <div class="header-right">
 
             <form class="search nav-form">
@@ -90,7 +108,7 @@
                     <ul class="list-unstyled mb-2">
                         <li class="divider"></li>
                         <li>
-                            <a role="menuitem" tabindex="-1" href="<?= base_url('dashboard/profil') ?>"><i
+                            <a role="menuitem" tabindex="-1" href="<?= base_url('profil') ?>"><i
                                         class="fas fa-user"></i> Profil</a>
                         </li>
                         <li>

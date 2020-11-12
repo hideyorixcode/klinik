@@ -1,6 +1,6 @@
 <ul class="nav nav-main">
     <li>
-        <a class="nav-link" href="<?= base_url('dashboard/kecamatan') ?>">
+        <a class="nav-link" href="<?= base_url('dashboard') ?>">
             <i class="fas fa-home" aria-hidden="true"></i>
             <span>Dashboard</span>
         </a>

@@ -51,7 +51,12 @@ class LoginController extends BaseController
                         session()->set("id", encodeHash($cek_user['id']));
                         session()->set("username", $cek_user['username']);
                         session()->set("level", $cek_user['level']);
-                        return redirect()->to(base_url('dashboard'));
+                        if ($cek_user['level'] == 'pasien') {
+                            return redirect()->to(base_url(''));
+                        } else {
+                            return redirect()->to(base_url('dashboard'));
+                        }
+
                     } else {
                         session()->setFlashdata('gagal', 'salah username / password, silahkan cek kembali');
                         return redirect()->to(base_url('syslog'));
@@ -72,6 +77,6 @@ class LoginController extends BaseController
     public function logout()
     {
         session()->destroy();
-        return redirect()->to(base_url('syslog'));
+        return redirect()->to(base_url(''));
     }
 }

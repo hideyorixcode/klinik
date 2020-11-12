@@ -31,6 +31,13 @@ $routes->get('jadwal', 'HomeController::infojadwal');
 $routes->post('read-jadwal', 'HomeController::read_jadwal');
 $routes->get('detail-jadwal/(:any)', 'HomeController::detail_jadwal/$1');
 $routes->get('detail-petugas/(:any)', 'HomeController::detail_petugas/$1');
+$routes->get('profil', 'HomeController::profil', ['filter' => 'ceklogin']);
+$routes->post('update-profil', 'HomeController::update_profil_pasien', ['filter' => 'ceklogin']);
+$routes->post('upload-image', 'HomeController::upload_image', ['filter' => 'ceklogin']);
+$routes->post('delete-image', 'HomeController::delete_image', ['filter' => 'ceklogin']);
+$routes->get('layanan', 'HomeController::layanan', ['filter' => 'ceklogin']);
+$routes->get('daftar-layanan', 'HomeController::daftar_layanan');
+
 /**
  * --------------------------------------------------------------------
  * Route Definitions
@@ -40,18 +47,15 @@ $routes->get('detail-petugas/(:any)', 'HomeController::detail_petugas/$1');
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 //$routes->get('/', 'HomeController::index_front');
-$routes->group('dashboard', ['filter' => 'ceklogin'], function ($routes) {
-
+$routes->group('dashboard', ['filter' => 'cekloginLevel'], function ($routes) {
+    $routes->get('/', 'HomeController::dashboard');
     $routes->get('profil', 'HomeController::profil');
-    $routes->get('ubah-profil', 'HomeController::ubah_profil');
     $routes->post('update-profil', 'HomeController::update_profil');
-    $routes->get('ubah-password', 'HomeController::ubahpw');
-    $routes->post('update-password', 'HomeController::update_password');
-    $routes->get('log', 'LogController::index');
-    $routes->post('log/read', 'LogController::read');
+
+    $routes->get('log', 'LogController::index', ['filter' => 'cekloginAdmin']);
+    $routes->post('log/read', 'LogController::read', ['filter' => 'cekloginAdmin']);
     $routes->post('log/bulk_delete', 'LogController::bulk_delete', ['filter' => 'cekloginAdmin']);
-    $routes->post('upload-image', 'HomeController::upload_image');
-    $routes->post('delete-image', 'HomeController::delete_image');
+
 
     $routes->group('konfigurasi', ['filter' => 'cekloginAdmin'], function ($routes) {
         $routes->get('/', 'KonfigurasiController::index');

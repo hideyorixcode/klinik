@@ -103,6 +103,11 @@ class BaseController extends Controller
                 'sesi_alamat' => $data_pengguna['alamat'],
                 'sesi_jk' => $data_pengguna['jk'],
                 'sesi_tgl_lahir' => $data_pengguna['tgl_lahir'],
+                'sesi_gol_darah' => $data_pengguna['gol_darah'],
+                'sesi_tinggi_badan' => $data_pengguna['tinggi_badan'],
+                'sesi_berat_badan' => $data_pengguna['berat_badan'],
+                'sesi_bpjs' => $data_pengguna['bpjs'],
+
             ];
         }
 
