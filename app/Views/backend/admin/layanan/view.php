@@ -1,4 +1,4 @@
-<?= $this->extend('frontend/template'); ?>
+<?= $this->extend('backend/template'); ?>
 
 <?= $this->section('css'); ?>
 <!-- Specific Page Vendor CSS -->
@@ -61,16 +61,6 @@
                             <strong>Gagal!</strong> <?= session()->getFlashdata('gagal'); ?>
                         </div>
                     <?php } ?>
-                    <div class="row">
-                        <div class="col-sm-12 text-right">
-                            <div class="mb-3">
-                                <a class="btn btn-primary" href="<?= base_url('daftar-layanan') ?>"><i
-                                            class="fas fa-plus"></i>
-                                    Daftar Layanan
-                                </a>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="tabs">
                         <ul class="nav nav-tabs nav-justified">
@@ -90,11 +80,12 @@
                                     <thead class="th-primary">
                                     <tr>
                                         <th width="5%">No.</th>
-                                        <th width="20">Jadwal</th>
+                                        <th width="10%">Jadwal</th>
                                         <th width="5%">No Urut</th>
-                                        <th width="25%">Nama Petugas</th>
-                                        <th width="25%">Poli</th>
-                                        <th width="10%">Status</th>
+                                        <th width="20%">Nama Pasien</th>
+                                        <th width="20%">Nama Petugas</th>
+                                        <th width="15">Poli</th>
+                                        <th width="5%">Status</th>
                                         <th width="15%"></th>
                                         <th width="5%"></th>
                                     </tr>
@@ -109,11 +100,12 @@
                                     <thead class="th-primary">
                                     <tr>
                                         <th width="5%">No.</th>
-                                        <th width="20">Jadwal</th>
+                                        <th width="10%">Jadwal</th>
                                         <th width="5%">No Urut</th>
-                                        <th width="25%">Nama Petugas</th>
-                                        <th width="25%">Poli</th>
-                                        <th width="10%">Status</th>
+                                        <th width="20%">Nama Pasien</th>
+                                        <th width="20%">Nama Petugas</th>
+                                        <th width="15">Poli</th>
+                                        <th width="5%">Status</th>
                                         <th width="15%"></th>
                                         <th width="5%"></th>
                                     </tr>
@@ -128,11 +120,12 @@
                                     <thead class="th-primary">
                                     <tr>
                                         <th width="5%">No.</th>
-                                        <th width="20">Jadwal</th>
+                                        <th width="15%">Jadwal</th>
                                         <th width="5%">No Urut</th>
-                                        <th width="25%">Nama Petugas</th>
-                                        <th width="25%">Poli</th>
-                                        <th width="10%">Status</th>
+                                        <th width="15%">Nama Pasien</th>
+                                        <th width="20%">Nama Petugas</th>
+                                        <th width="15">Poli</th>
+                                        <th width="5%">Status</th>
                                         <th width="15%"></th>
                                         <th width="5%"></th>
                                     </tr>
@@ -199,12 +192,12 @@
             ],
             "order": [],
             "ajax": {
-                "url": "<?=base_url('read-layanan');?>",
+                "url": "<?=base_url('dashboard/layanan/read/');?>",
                 "type": "POST",
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Rekam Medis';
-                    d.id_pasien_fk = <?=$sesi_id_decode; ?>;
+
 
                 }
             },
@@ -221,11 +214,11 @@
             },
                 {
                     "className": "dt-center",
-                    "targets": [0, 1, 2, 5, 6]
+                    "targets": [0, 1, 2, 6, 7]
                 },
                 {
                     "orderable": false,
-                    "targets": [0, 1, 6]
+                    "targets": [0, 1, 7]
                 },
             ],
             language: {
@@ -256,12 +249,12 @@
             ],
             "order": [],
             "ajax": {
-                "url": "<?=base_url('read-layanan');?>",
+                "url": "<?=base_url('dashboard/layanan/read/');?>",
                 "type": "POST",
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Konsultasi';
-                    d.id_pasien_fk = <?=$sesi_id_decode; ?>;
+
 
                 }
             },
@@ -278,11 +271,11 @@
             },
                 {
                     "className": "dt-center",
-                    "targets": [0, 1, 2, 5, 6]
+                    "targets": [0, 1, 2, 6, 7]
                 },
                 {
                     "orderable": false,
-                    "targets": [0, 1, 6]
+                    "targets": [0, 1, 7]
                 },
             ],
             language: {
@@ -313,12 +306,12 @@
             ],
             "order": [],
             "ajax": {
-                "url": "<?=base_url('read-layanan');?>",
+                "url": "<?=base_url('dashboard/layanan/read/');?>",
                 "type": "POST",
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Pembuatan Surat';
-                    d.id_pasien_fk = <?=$sesi_id_decode; ?>;
+
 
                 }
             },
@@ -335,11 +328,11 @@
             },
                 {
                     "className": "dt-center",
-                    "targets": [0, 1, 2, 5, 6]
+                    "targets": [0, 1, 2, 6, 7]
                 },
                 {
                     "orderable": false,
-                    "targets": [0, 1, 6]
+                    "targets": [0, 1, 7]
                 },
             ],
             language: {

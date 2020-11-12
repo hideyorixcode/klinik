@@ -195,7 +195,7 @@
                                             while ($x < count(enumValues('pengguna', 'gol_darah'))) {
                                                 $stringgol = enumValues('pengguna', 'gol_darah')[$x];
                                                 ?>
-                                                <option <?= $selected_goldar == $stringjk ? 'selected' : ''; ?>
+                                                <option <?= $selected_goldar == $stringgol ? 'selected' : ''; ?>
                                                         value="<?= $stringgol ?>">
                                                     <?= strtoupper($stringgol) ?></option>
                                                 <?php
@@ -204,7 +204,7 @@
                                             ?>
                                         </select>
                                         <div class="invalid-feedback">
-                                            <?= $validation->getError('stringgol'); ?>
+                                            <?= $validation->getError('gol_darah'); ?>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">

@@ -29,6 +29,13 @@
             <span>Jadwal Klinik</span>
         </a>
     </li>
+
+    <li class="<?= getSegment(2) == 'layanan' ? 'nav-active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('dashboard/layanan') ?>">
+            <i class="fas fa-reply" aria-hidden="true"></i>
+            <span>Pendaftaran Layanan</span>
+        </a>
+    </li>
     <li class="<?= getSegment(2) == 'pengguna' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard/pengguna') ?>">
             <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>

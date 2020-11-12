@@ -16,11 +16,16 @@ namespace App\Controllers;
  */
 
 
+use App\Models\DaftarModel;
 use App\Models\JadwalModel;
+use App\Models\KonsultasiModel;
 use App\Models\PoliModel;
 use App\Models\KonfigurasiModel;
 use App\Models\PenggunaModel;
 use App\Models\LogModel;
+use App\Models\RekamModel;
+use App\Models\SuratModel;
+use App\Models\viewdb\VDaftarModel;
 use App\Models\viewdb\VJadwalModel;
 use App\Models\viewdb\VPasienModel;
 use App\Models\viewdb\VPenggunaModel;
@@ -61,6 +66,12 @@ class BaseController extends Controller
         $this->mpoli = new PoliModel($this->reqService);
 
         $this->mjadwal = new JadwalModel();
+        $this->mdaftar = new DaftarModel();
+        $this->mrekam = new RekamModel();
+        $this->mkonsultasi = new KonsultasiModel();
+        $this->msurat = new SuratModel();
+        $this->viewdaftar = new VDaftarModel($this->reqService);
+
         $this->viewjadwal = new VJadwalModel($this->reqService);
 
         $this->form_validation = Services::validation();

@@ -209,6 +209,12 @@ class HomeController extends BaseController
 
     }
 
+    function read_by_id($id)
+    {
+        $data = $this->viewpengguna->where('id', $id)->first();
+        return $data;
+    }
+
     public function update_profil_pasien()
     {
         //inisiasi variabel
@@ -412,12 +418,6 @@ class HomeController extends BaseController
             }
         }
 
-    }
-
-    function read_by_id($id)
-    {
-        $data = $this->viewpengguna->where('id', $id)->first();
-        return $data;
     }
 
     function upload_image()
@@ -725,9 +725,154 @@ class HomeController extends BaseController
         $data = [
             'judul' => 'Daftar Antrian dan Pilih Layanan',
             'validation' => $this->form_validation,
+            'dataPoli' => $this->mpoli->where('active', 1)->find()
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
         return view('frontend/daftar_layanan', $data);
+    }
+
+    public function getJadwal()
+    {
+        $id_poli_fk = $this->request->getGet('id_poli_fk');
+        $data_jadwal = $this->viewjadwal->where('id_poli_fk', $id_poli_fk)->find();
+        echo '<option value=""> Pilih Jadwal </option>';
+        foreach ($data_jadwal as $r) {
+            echo '<option value="' . $r['id_jadwal'] . '">' . $r['hari'] . ', ' . $r['dari'] . '-' . $r['sampai'] . ' ' . $r['nama_petugas'] . '</option>';
+        }
+    }
+
+    public function createLayanan()
+    {
+        $id_pasien_fk = decodeHash($this->request->getPost('id_pasien_fk'));
+        $layanan = $this->request->getPost('layanan');
+        $id_jadwal_fk = $this->request->getPost('id_jadwal_fk');
+        $keterangan = $this->request->getPost('keterangan');
+        $tgl_daftar = ubahformatTgl($this->request->getPost('tgl_daftar'));
+
+        $rules = [
+            'layanan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Layanan'
+                ]
+            ],
+            'tgl_daftar' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Tanggal Daftar Harus Dipilih'
+                ]
+            ],
+            'id_jadwal_fk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Jadwal'
+                ]
+            ],
+
+
+        ];
+
+        $checkNoUrut = $this->mdaftar->where('id_jadwal_fk', $id_jadwal_fk)->where('tgl_daftar', $tgl_daftar)->find();
+
+        if (count($checkNoUrut) > 0) {
+            $nomor_urut = $this->mdaftar->where('id_jadwal_fk', $id_jadwal_fk)->where('tgl_daftar', $tgl_daftar)->orderBy('nomor_urut', 'DESC')->first()['nomor_urut'] + 1;
+
+        } else {
+            $nomor_urut = 1;
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('daftar-layanan'))->withInput();
+        } else {
+            $data = [
+                'id_pasien_fk' => $id_pasien_fk,
+                'id_jadwal_fk' => $id_jadwal_fk,
+                'tgl_daftar' => $tgl_daftar,
+                'layanan' => $layanan,
+                'keterangan' => $keterangan,
+                'nomor_urut' => $nomor_urut,
+                'status' => 'tunda',
+                'created_by' => $id_pasien_fk,
+                'updated_by' => $id_pasien_fk,
+            ];
+        }
+        //simpan
+        $insert = $this->mdaftar->insert($data);
+        if ($insert) {
+            $timestamp = date("Y-m-d H:i:s");
+            $data_log = [
+                'log_time' => $timestamp,
+                'log_id_user' => $insert,
+                'log_description' => $this->dataGlobal['sesi_username'] . ' Berhasil Daftar Layanan ' . $layanan,
+            ];
+            $this->mlog->insert($data_log);
+            session()->setFlashdata('sukses', 'Berhasil Mendaftar Layanan ' . $layanan);
+            return redirect()->to(base_url('layanan'));
+
+        } else {
+            session()->setFlashdata('gagal', 'Gagal Mendaftar Layanan');
+            return redirect()->to(base_url('layanan'));
+        }
+
+    }
+
+    public function read_layanan()
+    {
+        $mlayanan = $this->viewdaftar;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mlayanan->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
+                $row[] = $list->nomor_urut;
+                $row[] = '<a target="_blank" href="' . base_url('detail-petugas/' . encodeHash($list->idpetugas_fk)) . '">' . $list->nama_petugas . '</a>';
+                $row[] = $list->nama_poli;
+                if ($list->status == 'tunda') {
+                    $buttonstatus = '<button class="btn btn-xs btn-default btn-block">TUNDA</button>';
+                } else if ($list->status == 'batal') {
+                    $buttonstatus = '<button class="btn btn-xs btn-danger btn-block">BATAL</button>';
+                } else if ($list->status == 'proses') {
+                    $buttonstatus = '<button class="btn btn-xs btn-info btn-block">PROSES</button>';
+                } else if ($list->status == 'selesai') {
+                    $buttonstatus = '<button class="btn btn-xs btn-success btn-block">SELESAI</button>';
+                }
+                $row[] = $buttonstatus;
+                $row[] = '<a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print</span></a>';
+                $row[] = '';
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mlayanan->count_all(),
+                "recordsFiltered" => $mlayanan->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function detail_layanan($id)
+    {
+        $data = [
+            'judul' => 'Detail Permintaan Layanan',
+            'dataMaster' => $this->viewdaftar->where('id_daftar', decodeHash($id))->first(),
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/detail_layanan', $data);
+    }
+
+    public function print_layanan($id)
+    {
+        $data = [
+            'judul' => 'Print Permintaan Layanan',
+            'dataMaster' => $this->viewdaftar->where('id_daftar', decodeHash($id))->first(),
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/print_layanan', $data);
     }
 
 }

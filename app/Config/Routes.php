@@ -36,7 +36,12 @@ $routes->post('update-profil', 'HomeController::update_profil_pasien', ['filter'
 $routes->post('upload-image', 'HomeController::upload_image', ['filter' => 'ceklogin']);
 $routes->post('delete-image', 'HomeController::delete_image', ['filter' => 'ceklogin']);
 $routes->get('layanan', 'HomeController::layanan', ['filter' => 'ceklogin']);
-$routes->get('daftar-layanan', 'HomeController::daftar_layanan');
+$routes->get('daftar-layanan', 'HomeController::daftar_layanan', ['filter' => 'ceklogin']);
+$routes->get('select-jadwal', 'HomeController::getJadwal', ['filter' => 'ceklogin']);
+$routes->post('create-layanan', 'HomeController::createLayanan', ['filter' => 'ceklogin']);
+$routes->post('read-layanan', 'HomeController::read_layanan', ['filter' => 'ceklogin']);
+$routes->get('detail-layanan/(:any)', 'HomeController::detail_layanan/$1', ['filter' => 'ceklogin']);
+$routes->get('print-layanan/(:any)', 'HomeController::print_layanan/$1', ['filter' => 'ceklogin']);
 
 /**
  * --------------------------------------------------------------------
@@ -99,6 +104,27 @@ $routes->group('dashboard', ['filter' => 'cekloginLevel'], function ($routes) {
         $routes->get('delete/(:any)', 'JadwalController::delete/$1');
         $routes->post('bulk_delete', 'JadwalController::bulk_delete');
         $routes->post('bulk_status', 'JadwalController::bulk_status');
+    });
+
+    $routes->group('layanan', ['filter' => 'cekloginAdmin'], function ($routes) {
+        $routes->get('/', 'LayananController::index');
+        $routes->post('read', 'LayananController::read');
+        $routes->get('rekam-medis/(:any)', 'LayananController::rekam_medis/$1');
+        $routes->post('create-rekam', 'LayananController::createRekam');
+        $routes->post('update-rekam', 'LayananController::updateRekam');
+        $routes->get('konsultasi/(:any)', 'LayananController::konsultasi/$1');
+        $routes->post('create-konsultasi', 'LayananController::createKonsultasi');
+        $routes->post('update-konsultasi', 'LayananController::updateKonsultasi');
+        $routes->get('surat/(:any)', 'LayananController::surat/$1');
+        $routes->post('create-surat', 'LayananController::createSurat');
+        $routes->post('update-surat', 'LayananController::updateSurat');
+
+        $routes->get('edit/(:any)', 'LayananController::edit/$1');
+        $routes->get('detail/(:any)', 'LayananController::detail/$1');
+        $routes->post('update', 'LayananController::update');
+        $routes->get('delete/(:any)', 'LayananController::delete/$1');
+        $routes->post('bulk_delete', 'LayananController::bulk_delete');
+        $routes->post('bulk_status', 'LayananController::bulk_status');
     });
 
     $routes->group('pengguna', ['filter' => 'cekloginAdmin'], function ($routes) {
