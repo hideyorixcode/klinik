@@ -15,7 +15,13 @@ class PasienController extends BaseController
             'judul' => 'Daftar Pasien',
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/admin/pasien/view', $data);
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/pasien/view';
+        } else {
+            $view = 'pimpinan/pasien/view';
+        }
+        return view('backend/' . $view, $data);
+
     }
 
     public function read()
@@ -54,6 +60,40 @@ class PasienController extends BaseController
 
     }
 
+    public function read_user()
+    {
+        $mpasien = $this->viewpasien;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mpasien->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+
+                $row[] = $no;
+                $row[] = $list->username;
+                $row[] = $list->nama;
+                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
+                $row[] = $list->jk;
+                $row[] = $list->alamat;
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
+                $gambarnya = $list->avatar ? $list->avatar : 'user.png';
+                $row[] = '<figure class="image rounded"><a href="' . base_url('public/uploads/' . $gambarnya) . '" target="_blank"><img src="' . base_url('public/uploads/thumbs/' . $gambarnya) . '"  width="35px;" height="35px;" alt="" class="rounded-circle"/></a></figure>';
+                $row[] = '<a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a>';
+                $row[] = '';
+
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mpasien->count_all(),
+                "recordsFiltered" => $mpasien->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
 
     public function read_by_id($id)
     {
@@ -95,6 +135,9 @@ class PasienController extends BaseController
         $data_pengguna = $data = $this->viewpengguna->where('id', $idDecode)->first();
         $username_lama = $data_pengguna['username'];
         $email_lama = $data_pengguna['email'];
+        $nama_kk = $this->request->getPost('nama_kk');
+        $pekerjaan = $this->request->getPost('pekerjaan');
+        $agama = $this->request->getPost('agama');
 
         //validasi
         $rules = [
@@ -114,6 +157,12 @@ class PasienController extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'nama pengguna harus diisi.'
+                ]
+            ],
+            'nama_kk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'nama kepala keluarga harus diisi.'
                 ]
             ],
 
@@ -262,7 +311,10 @@ class PasienController extends BaseController
                 'gol_darah' => $gol_darah,
                 'tinggi_badan' => $tinggi_badan,
                 'berat_badan' => $berat_badan,
-                'bpjs' => $bpjs
+                'bpjs' => $bpjs,
+                'nama_kk' => $nama_kk,
+                'pekerjaan' => $pekerjaan,
+                'agama' => $agama
             ];
 
             if ($password != '') {

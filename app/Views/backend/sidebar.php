@@ -16,8 +16,12 @@
 
                 <?php if ($sesi_level == 'admin') {
                     echo $this->include('backend/admin/sidebarAdmin');
-                } else if ($sesi_level == 'sekdes') {
-                    echo $this->include('backend/sekdes/sidebarSekdes');
+                } else if ($sesi_level == 'dokter') {
+                    echo $this->include('backend/petugas/sidebarPetugas');
+                } else if ($sesi_level == 'bidan') {
+                    echo $this->include('backend/petugas/sidebarPetugas');
+                } else {
+                    echo $this->include('backend/pimpinan/sidebarPimpinan');
                 }
                 ?>
 

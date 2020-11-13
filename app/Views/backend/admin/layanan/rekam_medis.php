@@ -30,21 +30,70 @@
 
     <!-- start: page -->
     <div class="row">
-        <div class="col-lg-12 col-xl-12">
-            <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
-                  action="<?= base_url('dashboard/layanan/create-rekam') ?>" class="form-horizontal">
-                <?= csrf_field() ?>
-                <input type="hidden" name="id_daftar" id="id_daftar" value="<?= $id; ?>">
-                <section class="card card-secondary">
-                    <header class="card-header">
-                        <div class="card-actions">
-                            <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
-                        </div>
+        <div class="col-lg-4 col-xl-4">
+            <section class="card card-dark">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
+                    </div>
 
-                        <h2 class="card-title">Form Rekam Medis</h2>
-                    </header>
-                    <div class="card-body">
+                    <h2 class="card-title">Data Pasien</h2>
+                </header>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                        <tr>
+                            <td class="font-weight-bold">Nama Pasien</td>
+                            <td> <?= $dataPasien['nama']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Nama KK</td>
+                            <td> <?= $dataPasien['nama_kk']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Jenis Kelamin</td>
+                            <td> <?= $dataPasien['jk']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Pekerjaan</td>
+                            <td> <?= $dataPasien['pekerjaan']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Alamat</td>
+                            <td> <?= $dataPasien['alamat']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Agama</td>
+                            <td> <?= $dataPasien['agama']; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">No. Telp</td>
+                            <td> <?= $dataPasien['notelepon']; ?></td>
+                        </tr>
 
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+        </div>
+        <div class="col-lg-8 col-xl-8">
+
+            <section class="card card-secondary">
+                <header class="card-header">
+                    <div class="card-actions">
+                        <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
+                    </div>
+
+                    <h2 class="card-title">Form Rekam Medis</h2>
+                </header>
+                <div class="card-body">
+                    <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
+                          action="<?= base_url('dashboard/layanan/create-rekam') ?>" class="form-horizontal">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="id_daftar" id="id_daftar" value="<?= $id; ?>">
                         <?php if (!empty(session()->getFlashdata('sukses'))) { ?>
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

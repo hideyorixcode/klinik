@@ -68,14 +68,27 @@
                         <div class="row">
                             <div class="col-lg-6 col-xl-6">
 
-                                <div class="form-group">
-                                    <label>Nama Lengkap</label>
-                                    <input type="text" id="nama" name="nama"
-                                           class="form-control <?= ($validation->hasError('nama')) ? 'is-invalid' : '' ?>"
-                                           placeholder="Nama Lengkap" required autofocus
-                                           value="<?= old('nama') ? old('nama') : '' ?>">
-                                    <div class="invalid-feedback">
-                                        <?= $validation->getError('nama'); ?>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Nama Lengkap</label>
+                                        <input type="text" id="nama" name="nama"
+                                               class="form-control <?= ($validation->hasError('nama')) ? 'is-invalid' : '' ?>"
+                                               placeholder="Nama Lengkap" required autofocus
+                                               value="<?= old('nama') ? old('nama') : '' ?>">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('nama'); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label>Nama Kepala Keluarga</label>
+                                        <input type="text" id="nama_kk" name="nama_kk"
+                                               class="form-control <?= ($validation->hasError('nama_kk')) ? 'is-invalid' : '' ?>"
+                                               placeholder="Nama Kepala Keluarga" required autofocus
+                                               value="<?= old('nama_kk') ? old('nama_kk') : '' ?>">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('nama_kk'); ?>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -243,6 +256,44 @@
                                         </select>
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('bpjs'); ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-9">
+                                        <label>Pekerjaan</label>
+                                        <input type="text"
+                                               class="form-control <?= ($validation->hasError('pekerjaan')) ? 'is-invalid' : ''; ?>"
+                                               id="pekerjaan" name="pekerjaan" placeholder="Pekerjaan"
+                                               value="<?= old('pekerjaan') ? old('pekerjaan') : '' ?>">
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('pekerjaan'); ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label>Agama</label>
+                                        <select name="agama" id="agama"
+                                                class="form-control  <?= ($validation->hasError('agama')) ? 'is-invalid' : ''; ?>">
+                                            <?php
+                                            $x = 0;
+                                            $selected_agama = old('agama') ? old('agama') : '';
+                                            while ($x < count(enumValues('pengguna', 'agama'))) {
+                                                $stringagama = enumValues('pengguna', 'agama')[$x];
+                                                ?>
+                                                <option <?= $selected_agama == $stringagama ? 'selected' : ''; ?>
+                                                        value="<?= $stringagama ?>">
+                                                    <?= strtoupper($stringagama) ?></option>
+                                                <?php
+                                                $x++;
+                                            }
+                                            ?>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('agama'); ?>
                                         </div>
                                     </div>
 

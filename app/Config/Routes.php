@@ -42,6 +42,9 @@ $routes->post('create-layanan', 'HomeController::createLayanan', ['filter' => 'c
 $routes->post('read-layanan', 'HomeController::read_layanan', ['filter' => 'ceklogin']);
 $routes->get('detail-layanan/(:any)', 'HomeController::detail_layanan/$1', ['filter' => 'ceklogin']);
 $routes->get('print-layanan/(:any)', 'HomeController::print_layanan/$1', ['filter' => 'ceklogin']);
+$routes->get('print-konsultasi/(:any)', 'HomeController::print_konsultasi/$1', ['filter' => 'ceklogin']);
+$routes->get('print-surat/(:any)', 'HomeController::print_surat/$1', ['filter' => 'ceklogin']);
+$routes->post('print-rekam', 'HomeController::print_rekam/', ['filter' => 'ceklogin']);
 
 /**
  * --------------------------------------------------------------------
@@ -70,51 +73,56 @@ $routes->group('dashboard', ['filter' => 'cekloginLevel'], function ($routes) {
         $routes->post('read', 'KonfigurasiController::read');
     });
 
-    $routes->group('poli', ['filter' => 'cekloginAdmin'], function ($routes) {
+    $routes->group('poli', function ($routes) {
         $routes->get('/', 'PoliController::index');
-        $routes->post('read', 'PoliController::read');
-        $routes->post('create', 'PoliController::create');
-        $routes->get('edit/(:any)', 'PoliController::edit/$1');
-        $routes->post('update', 'PoliController::update');
-        $routes->get('delete/(:any)', 'PoliController::delete/$1');
-        $routes->post('bulk_delete', 'PoliController::bulk_delete');
-        $routes->post('bulk_status', 'PoliController::bulk_status');
+        $routes->post('readUser', 'PoliController::read_user');
+        $routes->post('read', 'PoliController::read', ['filter' => 'cekloginAdmin']);
+        $routes->post('create', 'PoliController::create', ['filter' => 'cekloginAdmin']);
+        $routes->get('edit/(:any)', 'PoliController::edit/$1', ['filter' => 'cekloginAdmin']);
+        $routes->post('update', 'PoliController::update', ['filter' => 'cekloginAdmin']);
+        $routes->get('delete/(:any)', 'PoliController::delete/$1', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_delete', 'PoliController::bulk_delete', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_status', 'PoliController::bulk_status', ['filter' => 'cekloginAdmin']);
     });
 
-    $routes->group('pasien', ['filter' => 'cekloginAdmin'], function ($routes) {
+    $routes->group('pasien', function ($routes) {
         $routes->get('/', 'PasienController::index');
-        $routes->post('read', 'PasienController::read');
-        $routes->post('create', 'PasienController::create');
-        $routes->get('edit/(:any)', 'PasienController::edit/$1');
+        $routes->post('readUser', 'PasienController::read_user');
+        $routes->post('read', 'PasienController::read', ['filter' => 'cekloginAdmin']);
+        $routes->get('edit/(:any)', 'PasienController::edit/$1', ['filter' => 'cekloginAdmin']);
         $routes->get('detail/(:any)', 'PasienController::detail/$1');
-        $routes->post('update', 'PasienController::update');
-        $routes->get('delete/(:any)', 'PasienController::delete/$1');
-        $routes->post('bulk_delete', 'PasienController::bulk_delete');
-        $routes->post('bulk_status', 'PasienController::bulk_status');
+        $routes->post('update', 'PasienController::update', ['filter' => 'cekloginAdmin']);
+        $routes->get('delete/(:any)', 'PasienController::delete/$1', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_delete', 'PasienController::bulk_delete', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_status', 'PasienController::bulk_status', ['filter' => 'cekloginAdmin']);
     });
 
-    $routes->group('jadwal', ['filter' => 'cekloginAdmin'], function ($routes) {
+    $routes->group('jadwal', function ($routes) {
         $routes->get('/', 'JadwalController::index');
-        $routes->post('read', 'JadwalController::read');
-        $routes->get('form', 'JadwalController::form');
-        $routes->post('create', 'JadwalController::create');
-        $routes->get('edit/(:any)', 'JadwalController::edit/$1');
+        $routes->post('read', 'JadwalController::read', ['filter' => 'cekloginAdmin']);
+        $routes->post('read-user', 'JadwalController::read_user');
+        $routes->get('form', 'JadwalController::form', ['filter' => 'cekloginAdmin']);
+        $routes->post('create', 'JadwalController::create', ['filter' => 'cekloginAdmin']);
+        $routes->get('edit/(:any)', 'JadwalController::edit/$1', ['filter' => 'cekloginAdmin']);
         $routes->get('detail/(:any)', 'JadwalController::detail/$1');
-        $routes->post('update', 'JadwalController::update');
-        $routes->get('delete/(:any)', 'JadwalController::delete/$1');
-        $routes->post('bulk_delete', 'JadwalController::bulk_delete');
-        $routes->post('bulk_status', 'JadwalController::bulk_status');
+        $routes->post('update', 'JadwalController::update', ['filter' => 'cekloginAdmin']);
+        $routes->get('delete/(:any)', 'JadwalController::delete/$1', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_delete', 'JadwalController::bulk_delete', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_status', 'JadwalController::bulk_status', ['filter' => 'cekloginAdmin']);
     });
 
-    $routes->group('layanan', ['filter' => 'cekloginAdmin'], function ($routes) {
+    $routes->group('layanan', function ($routes) {
         $routes->get('/', 'LayananController::index');
-        $routes->post('read', 'LayananController::read');
+        $routes->post('read', 'LayananController::read', ['filter' => 'cekloginAdmin']);
+        $routes->post('readUser', 'LayananController::read_user');
+        $routes->post('readPetugas', 'LayananController::read_petugas');
         $routes->get('rekam-medis/(:any)', 'LayananController::rekam_medis/$1');
         $routes->post('create-rekam', 'LayananController::createRekam');
         $routes->post('update-rekam', 'LayananController::updateRekam');
         $routes->get('konsultasi/(:any)', 'LayananController::konsultasi/$1');
         $routes->post('create-konsultasi', 'LayananController::createKonsultasi');
         $routes->post('update-konsultasi', 'LayananController::updateKonsultasi');
+
         $routes->get('surat/(:any)', 'LayananController::surat/$1');
         $routes->post('create-surat', 'LayananController::createSurat');
         $routes->post('update-surat', 'LayananController::updateSurat');
@@ -139,18 +147,18 @@ $routes->group('dashboard', ['filter' => 'cekloginLevel'], function ($routes) {
         $routes->post('bulk_status', 'PenggunaController::bulk_status');
     });
 
-    $routes->group('petugas', ['filter' => 'cekloginAdmin'], function ($routes) {
+    $routes->group('petugas', function ($routes) {
         $routes->get('/', 'PetugasController::index');
         $routes->get('getViewData', 'PetugasController::view_data');
         $routes->get('getSearchData', 'PetugasController::search');
-        $routes->get('form', 'PetugasController::form');
-        $routes->post('create', 'PetugasController::create');
-        $routes->get('edit/(:any)', 'PetugasController::edit/$1');
+        $routes->get('form', 'PetugasController::form', ['filter' => 'cekloginAdmin']);
+        $routes->post('create', 'PetugasController::create', ['filter' => 'cekloginAdmin']);
+        $routes->get('edit/(:any)', 'PetugasController::edit/$1', ['filter' => 'cekloginAdmin']);
         $routes->get('detail/(:any)', 'PetugasController::detail/$1');
-        $routes->post('update', 'PetugasController::update');
-        $routes->get('delete/(:any)', 'PetugasController::delete/$1');
-        $routes->post('bulk_delete', 'PetugasController::bulk_delete');
-        $routes->post('bulk_status', 'PetugasController::bulk_status');
+        $routes->post('update', 'PetugasController::update', ['filter' => 'cekloginAdmin']);
+        $routes->get('delete/(:any)', 'PetugasController::delete/$1', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_delete', 'PetugasController::bulk_delete', ['filter' => 'cekloginAdmin']);
+        $routes->post('bulk_status', 'PetugasController::bulk_status', ['filter' => 'cekloginAdmin']);
     });
 });
 $routes->get('/syslog', 'LoginController::index');

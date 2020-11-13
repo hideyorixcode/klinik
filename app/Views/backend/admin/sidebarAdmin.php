@@ -1,5 +1,5 @@
 <ul class="nav nav-main">
-    <li>
+    <li class="<?= getSegment(2) == '' ? 'nav-active' : ''; ?>">
         <a class="nav-link" href="<?= base_url('dashboard') ?>">
             <i class="fas fa-home" aria-hidden="true"></i>
             <span>Dashboard</span>
@@ -48,12 +48,12 @@
             <span>Log Aktivitas</span>
         </a>
     </li>
-    <li class="<?= getSegment(2) == 'konfigurasi' ? 'nav-active' : ''; ?>">
-        <a class="nav-link" href="<?= base_url('dashboard/konfigurasi') ?>">
-            <i class="fas fa-cog" aria-hidden="true"></i>
-            <span>Konfigurasi App</span>
-        </a>
-    </li>
+    <!--    <li class="--><? //= getSegment(2) == 'konfigurasi' ? 'nav-active' : ''; ?><!--">-->
+    <!--        <a class="nav-link" href="--><? //= base_url('dashboard/konfigurasi') ?><!--">-->
+    <!--            <i class="fas fa-cog" aria-hidden="true"></i>-->
+    <!--            <span>Konfigurasi App</span>-->
+    <!--        </a>-->
+    <!--    </li>-->
 
 
 </ul>

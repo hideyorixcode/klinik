@@ -89,13 +89,13 @@
                                 <div class="invalid-feedback"><?=$validation->getError('password');?></div>
 
                             </div>
-                            <a href="pages-recover-password.html" class="float-right">Lupa Password?</a>
+                            <!--                            <a href="pages-recover-password.html" class="float-right">Lupa Password?</a>-->
                         </div>
 
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="checkbox-custom checkbox-default">
-                                    <input id="RememberMe" name="rememberme" type="checkbox" />
+                                    <input id="RememberMe" name="rememberme" type="checkbox"/>
                                     <label for="RememberMe">Ingat Saya</label>
                                 </div>
                             </div>

@@ -11,11 +11,23 @@ class LayananController extends BaseController
 
     public function index()
     {
+        $db = \Config\Database::connect();
+        $dataPasien = $db->table('vrekam')->groupBy("id_pasien_fk")->get()->getResultArray();
         $data = [
             'judul' => 'Daftar Layanan',
+            'dataPasien' => $dataPasien,
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/admin/layanan/view', $data);
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/layanan/view';
+        } else if ($this->dataGlobal['sesi_level'] == 'dokter') {
+            $view = 'petugas/layanan/view';
+        } else if ($this->dataGlobal['sesi_level'] == 'bidan') {
+            $view = 'petugas/layanan/view';
+        } else {
+            $view = 'pimpinan/layanan/view';
+        }
+        return view('backend/' . $view, $data);
     }
 
     public function read()
@@ -52,8 +64,122 @@ class LayananController extends BaseController
                 } else {
                     $buttonaksi = '<a href="' . base_url('dashboard/layanan/surat/' . encodeHash($list->id_daftar)) . '" class="btn btn-primary btn-xs waves-effect waves-themed" title="Pembuatan Surat"><span class="fas fa-arrow-circle-right" aria-hidden="true"> Data Pembuatan Surat</span></a>';
                 }
-                $row[] = '<a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print</span></a>
-<a href="' . base_url('dashboard/layanan/edit/' . encodeHash($list->id_daftar)) . '" class="btn btn-warning btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-edit" aria-hidden="true"> Ubah Status</span></a> ' . $buttonaksi;
+                $row[] = '<div class="btn-group flex-wrap"><a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print</span></a>
+<a href="' . base_url('dashboard/layanan/edit/' . encodeHash($list->id_daftar)) . '" class="btn btn-warning btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-edit" aria-hidden="true"> Ubah Status</span></a> ' . $buttonaksi . '</div>';
+                $row[] = '';
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mlayanan->count_all_admin(),
+                "recordsFiltered" => $mlayanan->count_filtered_admin(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function read_petugas()
+    {
+        $mlayanan = $this->viewdaftar;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mlayanan->get_datatables_admin();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
+                $row[] = $list->nomor_urut;
+                $row[] = $list->nama;
+                $row[] = $list->nama_poli;
+                if ($list->status == 'tunda') {
+                    $buttonstatus = '<button class="btn btn-xs btn-default btn-block">TUNDA</button>';
+                } else if ($list->status == 'batal') {
+                    $buttonstatus = '<button class="btn btn-xs btn-danger btn-block">BATAL</button>';
+                } else if ($list->status == 'proses') {
+                    $buttonstatus = '<button class="btn btn-xs btn-info btn-block">PROSES</button>';
+                } else if ($list->status == 'selesai') {
+                    $buttonstatus = '<button class="btn btn-xs btn-success btn-block">SELESAI</button>';
+                }
+                $row[] = $buttonstatus;
+
+                if ($list->layanan == 'Rekam Medis') {
+                    $buttonaksi = '<a href="' . base_url('dashboard/layanan/rekam-medis/' . encodeHash($list->id_daftar)) . '" class="btn btn-primary btn-xs waves-effect waves-themed" title="Data Rekam Medis"><span class="fas fa-arrow-circle-right" aria-hidden="true"> Data Rekam Medis</span></a>';
+                } else if ($list->layanan == 'Konsultasi') {
+                    $buttonaksi = '<a href="' . base_url('dashboard/layanan/konsultasi/' . encodeHash($list->id_daftar)) . '" class="btn btn-primary btn-xs waves-effect waves-themed" title="Data Konsultasi"><span class="fas fa-arrow-circle-right" aria-hidden="true"> Data Konsultasi</span></a>';
+                } else {
+                    $buttonaksi = '<a href="' . base_url('dashboard/layanan/surat/' . encodeHash($list->id_daftar)) . '" class="btn btn-primary btn-xs waves-effect waves-themed" title="Pembuatan Surat"><span class="fas fa-arrow-circle-right" aria-hidden="true"> Data Pembuatan Surat</span></a>';
+                }
+                $row[] = '<div class="btn-group flex-wrap"><a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print</span></a>
+<a href="' . base_url('dashboard/layanan/edit/' . encodeHash($list->id_daftar)) . '" class="btn btn-warning btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-edit" aria-hidden="true"> Ubah Status</span></a> ' . $buttonaksi . '</div>';
+                $row[] = '';
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mlayanan->count_all_admin(),
+                "recordsFiltered" => $mlayanan->count_filtered_admin(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function read_user()
+    {
+        $mlayanan = $this->viewdaftar;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mlayanan->get_datatables_admin();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
+                $row[] = $list->nomor_urut;
+                $row[] = $list->nama;
+                $row[] = '<a target="_blank" href="' . base_url('detail-petugas/' . encodeHash($list->idpetugas_fk)) . '">' . $list->nama_petugas . '</a>';
+                $row[] = $list->nama_poli;
+                if ($list->status == 'tunda') {
+                    $buttonstatus = '<button class="btn btn-xs btn-default btn-block">TUNDA</button>';
+                } else if ($list->status == 'batal') {
+                    $buttonstatus = '<button class="btn btn-xs btn-danger btn-block">BATAL</button>';
+                } else if ($list->status == 'proses') {
+                    $buttonstatus = '<button class="btn btn-xs btn-info btn-block">PROSES</button>';
+                } else if ($list->status == 'selesai') {
+                    $buttonstatus = '<button class="btn btn-xs btn-success btn-block">SELESAI</button>';
+                }
+                if ($list->status == 'tunda') {
+                    $buttonstatus = '<button class="btn btn-xs btn-default btn-block">TUNDA</button>';
+                } else if ($list->status == 'batal') {
+                    $buttonstatus = '<button class="btn btn-xs btn-danger btn-block">BATAL</button>';
+                } else if ($list->status == 'proses') {
+                    $buttonstatus = '<button class="btn btn-xs btn-info btn-block">PROSES</button>';
+                } else if ($list->status == 'selesai') {
+                    $buttonstatus = '<button class="btn btn-xs btn-success btn-block">SELESAI</button>';
+                }
+                if ($list->layanan == 'Konsultasi') {
+                    $cekkonsul = $this->mkonsultasi->where('id_daftar_fk', $list->id_daftar)->find();
+                    if (count($cekkonsul) > 0) {
+                        $buttonaksi = '<a href="' . base_url('print-konsultasi/' . encodeHash($list->id_daftar)) . '" target="_blank" class="btn btn-primary btn-xs waves-effect waves-themed" title="Print Konsultasi"><span class="fas fa-print" aria-hidden="true"> Print Hasil Konsultasi</span></a>';
+                    } else {
+                        $buttonaksi = '';
+                    }
+                } else if ($list->layanan == 'Pembuatan Surat') {
+                    $ceksurat = $this->msurat->where('id_daftar_fk', $list->id_daftar)->find();
+                    if (count($ceksurat) > 0) {
+                        $buttonaksi = '<a href="' . base_url('print-surat/' . encodeHash($list->id_daftar)) . '" target="_blank" class="btn btn-primary btn-xs waves-effect waves-themed" title="Print Surat"><span class="fas fa-print" aria-hidden="true"> Print Hasil Pembuatan Surat</span></a>';
+                    } else {
+                        $buttonaksi = '';
+                    }
+                } else {
+                    $buttonaksi = '';
+                }
+                $row[] = $buttonstatus;
+                $row[] = '<a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print Kartu</span></a> ' . $buttonaksi;
                 $row[] = '';
                 $data[] = $row;
             }
@@ -152,15 +278,18 @@ class LayananController extends BaseController
     {
         if (count($this->mrekam->where('id_daftar_fk', decodeHash($id))->find()) > 0) {
             $dataMaster = $this->mrekam->where('id_daftar_fk', decodeHash($id))->first();
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
             $view = 'rekam_medis_edit';
         } else {
             $dataMaster = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
             $view = 'rekam_medis';
         }
         $data = [
             'judul' => 'Form Rekam Medis',
             'validation' => $this->form_validation,
             'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
             'id' => $id
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
@@ -304,20 +433,24 @@ class LayananController extends BaseController
     {
         if (count($this->mkonsultasi->where('id_daftar_fk', decodeHash($id))->find()) > 0) {
             $dataMaster = $this->mkonsultasi->where('id_daftar_fk', decodeHash($id))->first();
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
             $view = 'konsultasi_edit';
         } else {
             $dataMaster = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
             $view = 'konsultasi';
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
         }
         $data = [
             'judul' => 'Form Konsultasi',
             'validation' => $this->form_validation,
             'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
             'id' => $id
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
         return view('backend/admin/layanan/' . $view, $data);
     }
+
 
     public function createKonsultasi()
     {
@@ -445,14 +578,17 @@ class LayananController extends BaseController
         if (count($this->msurat->where('id_daftar_fk', decodeHash($id))->find()) > 0) {
             $dataMaster = $this->msurat->where('id_daftar_fk', decodeHash($id))->first();
             $view = 'surat_edit';
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
         } else {
             $dataMaster = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
             $view = 'surat';
+            $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
         }
         $data = [
             'judul' => 'Form Surat',
             'validation' => $this->form_validation,
             'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
             'id' => $id
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
@@ -533,6 +669,7 @@ class LayananController extends BaseController
             $datanya = [
                 'id_daftar_fk' => $id_decode,
                 'tgl_surat' => $tgl_surat,
+                'jenis_surat' => $jenis_surat,
                 'pemeriksaan' => $pemeriksaan,
                 'untuk' => $untuk,
                 'td' => $td,
@@ -543,8 +680,8 @@ class LayananController extends BaseController
                 'updated_by' => decodeHash($this->dataGlobal['sesi_id']),
             ];
         } else if ($jenis_surat == 'SURAT SAKIT') {
-            $mulai = ubahformatTgl($this->request->getPost('mulai'));
-            $sampai = ubahformatTgl($this->request->getPost('sampai'));
+            $mulai = $this->request->getPost('mulai');
+            $sampai = $this->request->getPost('sampai');
             $rules += [
                 'mulai' => [
                     'rules' => 'required',
@@ -561,14 +698,17 @@ class LayananController extends BaseController
 
 
             ];
-            $datanya = [
-                'id_daftar_fk' => $id_decode,
-                'tgl_surat' => $tgl_surat,
-                'mulai' => $mulai,
-                'sampai' => $sampai,
-                'created_by' => decodeHash($this->dataGlobal['sesi_id']),
-                'updated_by' => decodeHash($this->dataGlobal['sesi_id']),
-            ];
+            if ($mulai != '' && $sampai != '') {
+                $datanya = [
+                    'id_daftar_fk' => $id_decode,
+                    'tgl_surat' => $tgl_surat,
+                    'jenis_surat' => $jenis_surat,
+                    'mulai' => ubahformatTgl($mulai),
+                    'sampai' => ubahformatTgl($sampai),
+                    'created_by' => decodeHash($this->dataGlobal['sesi_id']),
+                    'updated_by' => decodeHash($this->dataGlobal['sesi_id']),
+                ];
+            }
         }
 
         if (!$this->validate($rules)) {
@@ -593,6 +733,150 @@ class LayananController extends BaseController
 
         } else {
             session()->setFlashdata('gagal', 'Gagal Mengelola Surat');
+            return redirect()->to(base_url('dashboard/layanan'));
+        }
+
+    }
+
+    public function updateSurat()
+    {
+        $id_daftar_fk = $this->request->getPost('id_daftar');
+        $id_decode = decodeHash($this->request->getPost('id_daftar'))[0];
+        $jenis_surat = $this->request->getPost('jenis_surat');
+        $tgl_surat = ubahformatTgl($this->request->getPost('tgl_surat'));
+
+        $rules = [
+            'tgl_surat' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih tanggal surat'
+                ]
+            ],
+            'jenis_surat' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Pilih Jenis Surat'
+                ]
+            ],
+
+        ];
+
+        if ($jenis_surat == 'SURAT SEHAT/TIDAK SEHAT') {
+            $pemeriksaan = $this->request->getPost('pemeriksaan');
+            $untuk = $this->request->getPost('untuk');
+            $td = $this->request->getPost('td');
+            $dn = $this->request->getPost('dn');
+            $tb = $this->request->getPost('tb');
+            $bb = $this->request->getPost('bb');
+
+            $rules += [
+                'pemeriksaan' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Pilih hasil pemeriksaan'
+                    ]
+                ],
+                'untuk' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Keperluan surat harus diisi'
+                    ]
+                ],
+                'td' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tensi darah harus diisi'
+                    ]
+                ],
+                'dn' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Denyut nadi harus diisi'
+                    ]
+                ],
+                'tb' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Tinggi badan harus diisi'
+                    ]
+                ],
+                'bb' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Berat badan harus diisi'
+                    ]
+                ],
+
+            ];
+
+            $datanya = [
+                'tgl_surat' => $tgl_surat,
+                'pemeriksaan' => $pemeriksaan,
+                'jenis_surat' => $jenis_surat,
+                'untuk' => $untuk,
+                'td' => $td,
+                'dn' => $dn,
+                'tb' => $tb,
+                'bb' => $bb,
+                'created_by' => decodeHash($this->dataGlobal['sesi_id']),
+                'updated_by' => decodeHash($this->dataGlobal['sesi_id']),
+            ];
+        } else if ($jenis_surat == 'SURAT SAKIT') {
+            $mulai = $this->request->getPost('mulai');
+            $sampai = $this->request->getPost('sampai');
+            $rules += [
+                'mulai' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Pilih Tanggal Mulai Cuti'
+                    ]
+                ],
+                'sampai' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Pilih Tanggal Selesai Cuti'
+                    ]
+                ],
+
+
+            ];
+            if ($mulai != '' && $sampai != '') {
+                $datanya = [
+
+                    'tgl_surat' => $tgl_surat,
+                    'jenis_surat' => $jenis_surat,
+                    'mulai' => ubahformatTgl($mulai),
+                    'sampai' => ubahformatTgl($sampai),
+                    'created_by' => decodeHash($this->dataGlobal['sesi_id']),
+                    'updated_by' => decodeHash($this->dataGlobal['sesi_id']),
+                ];
+            }
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->to(base_url('dashboard/layanan/konsultasi/' . $id_daftar_fk))->withInput();
+        } else {
+            $data = $datanya;
+        }
+
+        //simpan
+        $db = \Config\Database::connect();
+        $builder = $db->table('surat');
+        $update = $builder->where('id_daftar_fk', $id_decode)->update($data);
+        if ($update) {
+            $timestamp = date("Y-m-d H:i:s");
+            $data_log = [
+                'log_time' => $timestamp,
+                'log_id_user' => decodeHash($this->dataGlobal['sesi_id']),
+                'log_description' => $this->dataGlobal['sesi_username'] . ' Mengubah Data Surat ',
+            ];
+            $this->mlog->insert($data_log);
+            $this->mdaftar->update($id_decode, ['status' => 'selesai']);
+            session()->setFlashdata('sukses', 'Berhasil Mengubah Surat');
+            return redirect()->to(base_url('dashboard/layanan'));
+
+        } else {
+            session()->setFlashdata('gagal', 'Gagal Mengubah Surat');
             return redirect()->to(base_url('dashboard/layanan'));
         }
 

@@ -67,6 +67,10 @@
                                     <td><i class="fa fa-address-card"></i> <?= $dataMaster['nama']; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class="font-weight-bold">Nama KK</td>
+                                    <td><i class="fa fa-user-check"></i> <?= ($dataMaster['nama_kk']); ?></td>
+                                </tr>
+                                <tr>
                                     <td class="font-weight-bold">Tanggal Lahir</td>
                                     <td><i class="fa fa-calendar"></i> <?= TanggalIndo2($dataMaster['tgl_lahir']); ?>
                                     </td>
@@ -107,6 +111,17 @@
                                 <tr>
                                     <td class="font-weight-bold">Jenis Kelamin</td>
                                     <td><i class="fa fa-user-check"></i> <?= ucwords($dataMaster['jk']); ?></td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="font-weight-bold">Pekerjaan</td>
+                                    <td><i class="fa fa-user-check"></i> <?= ($dataMaster['pekerjaan']); ?></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="font-weight-bold">Agama</td>
+                                    <td><i class="fa fa-user-check"></i> <?= ($dataMaster['agama']); ?></td>
                                 </tr>
 
 

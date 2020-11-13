@@ -15,7 +15,13 @@ class PoliController extends BaseController
             'judul' => 'Daftar Poli',
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/admin/poli/view', $data);
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/poli/view';
+        } else {
+            $view = 'pimpinan/poli/view';
+        }
+        return view('backend/' . $view, $data);
+
     }
 
     public function read()
@@ -31,9 +37,36 @@ class PoliController extends BaseController
                 $row[] = '<input type="checkbox" class="data-check" value="' . encodeHash($list->id_poli) . '">';
                 $row[] = $no;
                 $row[] = $list->nama_poli;
-                $row[] = $list->active==1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
                 $row[] = '<a href="javascript:void(0);" class="btn btn-info btn-xs waves-effect waves-themed" title="Edit" onclick="edit(' . "'" . encodeHash($list->id_poli) . "'" . ')"><span class="fas fa-edit" aria-hidden="true"></span></a>
      <a href="javascript:void(0);" class="btn btn-danger btn-xs waves-effect waves-themed" title="Delete" onclick="delete_poli(' . "'" . encodeHash($list->id_poli) . "'" . ')"><span class="fas fa-trash" aria-hidden="true"> </span></a>';
+                $row[] = '';
+
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mpoli->count_all(),
+                "recordsFiltered" => $mpoli->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function read_user()
+    {
+        $mpoli = $this->mpoli;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mpoli->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->nama_poli;
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
                 $row[] = '';
 
                 $data[] = $row;

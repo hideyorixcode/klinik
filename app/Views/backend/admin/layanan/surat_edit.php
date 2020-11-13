@@ -82,7 +82,7 @@
                 </header>
                 <div class="card-body">
                     <form id="form" name="form" method="post" class="p-3" enctype="multipart/form-data"
-                          action="<?= base_url('dashboard/layanan/create-surat') ?>" class="form-horizontal">
+                          action="<?= base_url('dashboard/layanan/update-surat') ?>" class="form-horizontal">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id_daftar" id="id_daftar" value="<?= $id; ?>">
 
@@ -111,7 +111,7 @@
                                 <input type="tgl_surat"
                                        class="form-control tanggal <?= ($validation->hasError('tgl_surat')) ? 'is-invalid' : '' ?>"
                                        id="tgl_surat" name="tgl_surat" placeholder="Tanggal Surat" required
-                                       value="<?= old('tgl_surat') ? old('tgl_surat') : TanggalIndo2($dataMaster['tgl_daftar']); ?>">
+                                       value="<?= old('tgl_surat') ? old('tgl_surat') : TanggalIndo2($dataMaster['tgl_surat']); ?>">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('tgl_surat'); ?>
                                 </div>
@@ -127,7 +127,7 @@
                                     <option value="">Pilih</option>
                                     <?php
                                     $x = 0;
-                                    $selected_jenis_surat = old('jenis_surat') ? old('jenis_surat') : '';
+                                    $selected_jenis_surat = old('jenis_surat') ? old('jenis_surat') : $dataMaster['jenis_surat'];
                                     while ($x < count(enumValues('surat', 'jenis_surat'))) {
                                         $stringjenis_surat = enumValues('surat', 'jenis_surat')[$x];
                                         ?>
@@ -153,7 +153,7 @@
                                             class="form-control  <?= ($validation->hasError('pemeriksaan')) ? 'is-invalid' : '' ?>">
                                         <?php
                                         $x = 0;
-                                        $selected_pemeriksaan = old('pemeriksaan') ? old('pemeriksaan') : '';
+                                        $selected_pemeriksaan = old('pemeriksaan') ? old('pemeriksaan') : $dataMaster['pemeriksaan'];
                                         while ($x < count(enumValues('surat', 'pemeriksaan'))) {
                                             $stringpemeriksaan = enumValues('surat', 'pemeriksaan')[$x];
                                             ?>
@@ -176,7 +176,7 @@
                                 <div class="col-sm-9">
                                     <input type="text" id="untuk" name="untuk"
                                            class="form-control <?= ($validation->hasError('untuk')) ? 'is-invalid' : '' ?>"
-                                           value="<?= old('untuk') ? old('untuk') : '' ?>">
+                                           value="<?= old('untuk') ? old('untuk') : $dataMaster['untuk'] ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('untuk'); ?>
                                     </div>
@@ -188,7 +188,7 @@
                                 <div class="col-sm-9">
                                     <input type="number" id="td" name="td"
                                            class="form-control <?= ($validation->hasError('td')) ? 'is-invalid' : '' ?>"
-                                           value="<?= old('td') ? old('td') : '' ?>">
+                                           value="<?= old('td') ? old('td') : $dataMaster['td'] ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('td'); ?>
                                     </div>
@@ -200,7 +200,7 @@
                                 <div class="col-sm-9">
                                     <input type="number" id="dn" name="dn"
                                            class="form-control <?= ($validation->hasError('dn')) ? 'is-invalid' : '' ?>"
-                                           value="<?= old('dn') ? old('dn') : '' ?>">
+                                           value="<?= old('dn') ? old('dn') : $dataMaster['dn'] ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('dn'); ?>
                                     </div>
@@ -212,7 +212,7 @@
                                 <div class="col-sm-9">
                                     <input type="number" id="tb" name="tb"
                                            class="form-control <?= ($validation->hasError('tb')) ? 'is-invalid' : '' ?>"
-                                           value="<?= old('tb') ? old('tb') : $dataMaster['tinggi_badan'] ?>">
+                                           value="<?= old('tb') ? old('tb') : $dataMaster['tb'] ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('tb'); ?>
                                     </div>
@@ -224,7 +224,7 @@
                                 <div class="col-sm-9">
                                     <input type="number" id="bb" name="bb"
                                            class="form-control <?= ($validation->hasError('bb')) ? 'is-invalid' : '' ?>"
-                                           value="<?= old('bb') ? old('bb') : $dataMaster['berat_badan'] ?>">
+                                           value="<?= old('bb') ? old('bb') : $dataMaster['bb'] ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('bb'); ?>
                                     </div>
@@ -236,10 +236,16 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 control-label text-sm-right pt-2">Mulai Tanggal (Cuti)</label>
                                 <div class="col-sm-9">
+                                    <?php if ($dataMaster['mulai']) {
+                                        $isimulai = TanggalIndo2($dataMaster['mulai']);
+                                    } else {
+                                        $isimulai = '';
+                                    }
+                                    ?>
                                     <input type="mulai"
                                            class="form-control tanggal <?= ($validation->hasError('mulai')) ? 'is-invalid' : '' ?>"
                                            id="mulai" name="mulai" placeholder="Tanggal Mulai Cuti"
-                                           value="<?= old('mulai') ? old('mulai') : ''; ?>">
+                                           value="<?= old('mulai') ? old('mulai') : $isimulai; ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('mulai'); ?>
                                     </div>
@@ -249,10 +255,16 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 control-label text-sm-right pt-2">Sampai Tanggal (Cuti)</label>
                                 <div class="col-sm-9">
+                                    <?php if ($dataMaster['sampai']) {
+                                        $isisampai = TanggalIndo2($dataMaster['sampai']);
+                                    } else {
+                                        $isisampai = '';
+                                    }
+                                    ?>
                                     <input type="sampai"
                                            class="form-control tanggal <?= ($validation->hasError('sampai')) ? 'is-invalid' : '' ?>"
                                            id="sampai" name="sampai" placeholder="Tanggal Selesai Cuti"
-                                           value="<?= old('sampai') ? old('sampai') : ''; ?>">
+                                           value="<?= old('sampai') ? old('sampai') : $isisampai; ?>">
                                     <div class="invalid-feedback">
                                         <?= $validation->getError('sampai'); ?>
                                     </div>
@@ -265,9 +277,13 @@
                 <footer class="card-footer">
                     <div class="row justify-content-end text-right">
                         <div class="col-sm-12">
+                            <a class="btn btn-success" href="<?= base_url('print-surat/' . $id) ?>" target="_blank"><i
+                                        class="fa fa-print"></i>
+                                Cetak Surat
+                            </a>
                             <button class="btn btn-primary" type="submit"><i
                                         class="fa fa-save"></i>
-                                Simpan
+                                Simpan Perubahan
                             </button>
                         </div>
                     </div>

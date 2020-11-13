@@ -17,7 +17,12 @@ class JadwalController extends BaseController
             'dataPoli' => $this->mpoli->where('active', 1)->find()
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/admin/jadwal/view', $data);
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/jadwal/view';
+        } else {
+            $view = 'pimpinan/jadwal/view';
+        }
+        return view('backend/' . $view, $data);
     }
 
     public function read()
@@ -39,6 +44,37 @@ class JadwalController extends BaseController
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
                 $row[] = '<a href="' . base_url('dashboard/jadwal/detail/' . encodeHash($list->id_jadwal)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/jadwal/edit/' . encodeHash($list->id_jadwal)) . '" class="btn btn-info btn-xs waves-effect waves-themed" title="Edit"><span class="fas fa-edit" aria-hidden="true"></span></a>
      <a href="javascript:void(0);" class="btn btn-danger btn-xs waves-effect waves-themed" title="Delete" onclick="delete_jadwal(' . "'" . encodeHash($list->id_jadwal) . "'" . ')"><span class="fas fa-trash" aria-hidden="true"> </span></a>';
+                $row[] = '';
+
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mjadwal->count_all(),
+                "recordsFiltered" => $mjadwal->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+    public function read_user()
+    {
+        $mjadwal = $this->viewjadwal;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mjadwal->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->hari;
+                $row[] = $list->dari . '-' . $list->sampai;
+                $row[] = $list->nama_petugas;
+                $row[] = $list->nama_poli;
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
+                $row[] = '<a href="' . base_url('dashboard/jadwal/detail/' . encodeHash($list->id_jadwal)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a>';
                 $row[] = '';
 
                 $data[] = $row;

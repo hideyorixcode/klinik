@@ -236,6 +236,9 @@ class HomeController extends BaseController
         $tinggi_badan = $this->request->getPost('tinggi_badan');
         $berat_badan = $this->request->getPost('berat_badan');
         $bpjs = $this->request->getPost('bpjs');
+        $nama_kk = $this->request->getPost('nama_kk');
+        $pekerjaan = $this->request->getPost('pekerjaan');
+        $agama = $this->request->getPost('agama');
         //validasi
         $rules = [
             'jk' => [
@@ -254,6 +257,12 @@ class HomeController extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'nama pengguna harus diisi.'
+                ]
+            ],
+            'nama_kk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'nama kepala keluarga harus diisi.'
                 ]
             ],
             'gol_darah' => [
@@ -390,7 +399,10 @@ class HomeController extends BaseController
                 'gol_darah' => $gol_darah,
                 'tinggi_badan' => $tinggi_badan,
                 'berat_badan' => $berat_badan,
-                'bpjs' => $bpjs
+                'bpjs' => $bpjs,
+                'nama_kk' => $nama_kk,
+                'pekerjaan' => $pekerjaan,
+                'agama' => $agama
             ];
 
             if ($password_baru != '') {
@@ -557,6 +569,9 @@ class HomeController extends BaseController
         $tinggi_badan = $this->request->getPost('tinggi_badan');
         $berat_badan = $this->request->getPost('berat_badan');
         $bpjs = $this->request->getPost('bpjs');
+        $nama_kk = $this->request->getPost('nama_kk');
+        $pekerjaan = $this->request->getPost('pekerjaan');
+        $agama = $this->request->getPost('agama');
 
         $rules = [
             'jk' => [
@@ -575,6 +590,13 @@ class HomeController extends BaseController
                 'rules' => 'required',
                 'errors' => [
                     'required' => 'nama pengguna harus diisi.'
+                ]
+            ],
+
+            'nama_kk' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'nama kepala keluarga harus diisi.'
                 ]
             ],
 
@@ -679,7 +701,10 @@ class HomeController extends BaseController
                 'gol_darah' => $gol_darah,
                 'tinggi_badan' => $tinggi_badan,
                 'berat_badan' => $berat_badan,
-                'bpjs' => $bpjs
+                'bpjs' => $bpjs,
+                'nama_kk' => $nama_kk,
+                'pekerjaan' => $pekerjaan,
+                'agama' => $agama
             ];
         }
         //simpan
@@ -704,11 +729,91 @@ class HomeController extends BaseController
 
     public function dashboard()
     {
-        $data = [
-            'judul' => 'Beranda',
-        ];
+        if ($this->dataGlobal['sesi_level'] == 'admin' || $this->dataGlobal['sesi_level'] == 'pimpinan') {
+            $checkJumlahPasien = $this->mpengguna->where('level', 'pasien')->find();
+            $checkJumlahDokter = $this->mpengguna->where('level', 'dokter')->find();
+            $checkJumlahBidan = $this->mpengguna->where('level', 'bidan')->find();
+            $checkJumlahRekam = $this->mdaftar->where('layanan', 'Rekam Medis')->find();
+            $checkJumlahRekamTunda = $this->mdaftar->where('layanan', 'Rekam Medis')->where('status', 'tunda')->find();
+            $checkJumlahRekamSelesai = $this->mdaftar->where('layanan', 'Rekam Medis')->where('status', 'selesai')->find();
+            $checkJumlahRekamProses = $this->mdaftar->where('layanan', 'Rekam Medis')->where('status', 'proses')->find();
+            $checkJumlahRekamBatal = $this->mdaftar->where('layanan', 'Rekam Medis')->where('status', 'batal')->find();
+            $checkJumlahKonsultasi = $this->mdaftar->where('layanan', 'Konsultasi')->find();
+            $checkJumlahKonsultasiTunda = $this->mdaftar->where('layanan', 'Konsultasi')->where('status', 'tunda')->find();
+            $checkJumlahKonsultasiSelesai = $this->mdaftar->where('layanan', 'Konsultasi')->where('status', 'selesai')->find();
+            $checkJumlahKonsultasiProses = $this->mdaftar->where('layanan', 'Konsultasi')->where('status', 'proses')->find();
+            $checkJumlahKonsultasiBatal = $this->mdaftar->where('layanan', 'Konsultasi')->where('status', 'batal')->find();
+            $checkJumlahSurat = $this->mdaftar->where('layanan', 'Pembuatan Surat')->find();
+            $checkJumlahSuratTunda = $this->mdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'tunda')->find();
+            $checkJumlahSuratSelesai = $this->mdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'selesai')->find();
+            $checkJumlahSuratProses = $this->mdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'proses')->find();
+            $checkJumlahSuratBatal = $this->mdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'batal')->find();
+            $data = [
+                'judul' => 'Dashboard',
+                'jumlahPasien' => count($checkJumlahPasien),
+                'jumlahDokter' => count($checkJumlahDokter),
+                'jumlahBidan' => count($checkJumlahBidan),
+                'jumlahPoli' => $this->mpoli->countAll(),
+                'jumlahJadwal' => $this->mjadwal->countAll(),
+                'jumlahRekam' => count($checkJumlahRekam),
+                'jumlahKonsultasi' => count($checkJumlahKonsultasi),
+                'jumlahSurat' => count($checkJumlahSurat),
+                'jumlahRekamTunda' => count($checkJumlahRekamTunda),
+                'jumlahRekamSelesai' => count($checkJumlahRekamSelesai),
+                'jumlahRekamProses' => count($checkJumlahRekamProses),
+                'jumlahRekamBatal' => count($checkJumlahRekamBatal),
+                'jumlahKonsultasiTunda' => count($checkJumlahKonsultasiTunda),
+                'jumlahKonsultasiSelesai' => count($checkJumlahKonsultasiSelesai),
+                'jumlahKonsultasiProses' => count($checkJumlahKonsultasiProses),
+                'jumlahKonsultasiBatal' => count($checkJumlahKonsultasiBatal),
+                'jumlahSuratTunda' => count($checkJumlahSuratTunda),
+                'jumlahSuratSelesai' => count($checkJumlahSuratSelesai),
+                'jumlahSuratProses' => count($checkJumlahSuratProses),
+                'jumlahSuratBatal' => count($checkJumlahSuratBatal),
+            ];
+            $view = 'backend/dashboard';
+        } else {
+
+            $checkJumlahJadwal = $this->mjadwal->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahRekam = $this->viewdaftar->where('layanan', 'Rekam Medis')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahRekamTunda = $this->viewdaftar->where('layanan', 'Rekam Medis')->where('status', 'tunda')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahRekamSelesai = $this->viewdaftar->where('layanan', 'Rekam Medis')->where('status', 'selesai')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahRekamProses = $this->viewdaftar->where('layanan', 'Rekam Medis')->where('status', 'proses')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahRekamBatal = $this->viewdaftar->where('layanan', 'Rekam Medis')->where('status', 'batal')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahKonsultasi = $this->viewdaftar->where('layanan', 'Konsultasi')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahKonsultasiTunda = $this->viewdaftar->where('layanan', 'Konsultasi')->where('status', 'tunda')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahKonsultasiSelesai = $this->viewdaftar->where('layanan', 'Konsultasi')->where('status', 'selesai')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahKonsultasiProses = $this->viewdaftar->where('layanan', 'Konsultasi')->where('status', 'proses')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahKonsultasiBatal = $this->viewdaftar->where('layanan', 'Konsultasi')->where('status', 'batal')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahSurat = $this->viewdaftar->where('layanan', 'Pembuatan Surat')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahSuratTunda = $this->viewdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'tunda')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahSuratSelesai = $this->viewdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'selesai')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahSuratProses = $this->viewdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'proses')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $checkJumlahSuratBatal = $this->viewdaftar->where('layanan', 'Pembuatan Surat')->where('status', 'batal')->where('idpetugas_fk', $this->dataGlobal['sesi_id_decode'])->find();
+            $data = [
+                'judul' => 'Dashboard',
+                'jumlahJadwal' => count($checkJumlahJadwal),
+                'jumlahRekam' => count($checkJumlahRekam),
+                'jumlahKonsultasi' => count($checkJumlahKonsultasi),
+                'jumlahSurat' => count($checkJumlahSurat),
+                'jumlahRekamTunda' => count($checkJumlahRekamTunda),
+                'jumlahRekamSelesai' => count($checkJumlahRekamSelesai),
+                'jumlahRekamProses' => count($checkJumlahRekamProses),
+                'jumlahRekamBatal' => count($checkJumlahRekamBatal),
+                'jumlahKonsultasiTunda' => count($checkJumlahKonsultasiTunda),
+                'jumlahKonsultasiSelesai' => count($checkJumlahKonsultasiSelesai),
+                'jumlahKonsultasiProses' => count($checkJumlahKonsultasiProses),
+                'jumlahKonsultasiBatal' => count($checkJumlahKonsultasiBatal),
+                'jumlahSuratTunda' => count($checkJumlahSuratTunda),
+                'jumlahSuratSelesai' => count($checkJumlahSuratSelesai),
+                'jumlahSuratProses' => count($checkJumlahSuratProses),
+                'jumlahSuratBatal' => count($checkJumlahSuratBatal),
+            ];
+            $view = 'backend/dashboard';
+            $view = 'backend/petugas/dashboard';
+        }
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/blank', $data);
+        return view($view, $data);
     }
 
     public function layanan()
@@ -840,8 +945,25 @@ class HomeController extends BaseController
                 } else if ($list->status == 'selesai') {
                     $buttonstatus = '<button class="btn btn-xs btn-success btn-block">SELESAI</button>';
                 }
+                if ($list->layanan == 'Konsultasi') {
+                    $cekkonsul = $this->mkonsultasi->where('id_daftar_fk', $list->id_daftar)->find();
+                    if (count($cekkonsul) > 0) {
+                        $buttonaksi = '<a href="' . base_url('print-konsultasi/' . encodeHash($list->id_daftar)) . '" target="_blank" class="btn btn-primary btn-xs waves-effect waves-themed" title="Print Konsultasi"><span class="fas fa-print" aria-hidden="true"> Print Hasil Konsultasi</span></a>';
+                    } else {
+                        $buttonaksi = '';
+                    }
+                } else if ($list->layanan == 'Pembuatan Surat') {
+                    $ceksurat = $this->msurat->where('id_daftar_fk', $list->id_daftar)->find();
+                    if (count($ceksurat) > 0) {
+                        $buttonaksi = '<a href="' . base_url('print-surat/' . encodeHash($list->id_daftar)) . '" target="_blank" class="btn btn-primary btn-xs waves-effect waves-themed" title="Print Surat"><span class="fas fa-print" aria-hidden="true"> Print Hasil Pembuatan Surat</span></a>';
+                    } else {
+                        $buttonaksi = '';
+                    }
+                } else {
+                    $buttonaksi = '';
+                }
                 $row[] = $buttonstatus;
-                $row[] = '<a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print</span></a>';
+                $row[] = '<a href="' . base_url('print-layanan/' . encodeHash($list->id_daftar)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail" target="_blank"><span class="fas fa-print" aria-hidden="true"> Print Kartu</span></a> ' . $buttonaksi;
                 $row[] = '';
                 $data[] = $row;
             }
@@ -873,6 +995,55 @@ class HomeController extends BaseController
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
         return view('frontend/print_layanan', $data);
+    }
+
+    public function print_konsultasi($id)
+    {
+        $dataMaster = $this->mkonsultasi->where('id_daftar_fk', decodeHash($id))->first();
+        $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
+        $data = [
+            'judul' => 'Print Konsultasi',
+            'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
+            'id' => $id
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/print_konsultasi', $data);
+    }
+
+    public function print_surat($id)
+    {
+        $dataMaster = $this->msurat->where('id_daftar_fk', decodeHash($id))->first();
+        $dataPasien = $this->viewdaftar->where('id_daftar', decodeHash($id))->first();
+        $data = [
+            'judul' => 'Print Surat',
+            'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
+            'id' => $id
+        ];
+        if ($dataMaster['jenis_surat'] == 'SURAT SEHAT/TIDAK SEHAT') {
+            $view = 'print_surat_sehat';
+        } else {
+            $view = 'print_surat_sakit';
+        }
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/' . $view, $data);
+    }
+
+    public function print_rekam()
+    {
+        $db = \Config\Database::connect();
+        $id_pasien_fk = $this->request->getPost('id_pasien_fk');
+        $dataMaster = $db->table('vrekam')->where('id_pasien_fk', $id_pasien_fk)->get()->getResultArray();
+        //dd($dataMaster);
+        $dataPasien = $this->mpengguna->where('id', $id_pasien_fk)->first();
+        $data = [
+            'judul' => 'Print Rekap Rekam Medis',
+            'dataMaster' => $dataMaster,
+            'dataPasien' => $dataPasien,
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/print_rekam', $data);
     }
 
 }

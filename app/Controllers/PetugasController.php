@@ -21,7 +21,12 @@ class PetugasController extends BaseController
             'pesan_kosong' => '<strong>Data Petugas Kesehatan Masih Kosong ! </strong> Silahkan Tambah Petugas Kesehatan',
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
-        return view('backend/admin/petugas/view', $data);
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/petugas/view';
+        } else {
+            $view = 'pimpinan/petugas/view';
+        }
+        return view('backend/' . $view, $data);
     }
 
     public function view_data()
@@ -33,7 +38,14 @@ class PetugasController extends BaseController
             'usernamebawaan' => $this->dataGlobal['sesi_username'],
             'pesan_kosong' => '<strong>Data Petugas Kesehatan Masih Kosong ! </strong> Silahkan Tambah Petugas Kesehatan',
         ];
-        return view('backend/admin/petugas/tampilData', $data);
+
+        if ($this->dataGlobal['sesi_level'] == 'admin') {
+            $view = 'admin/petugas/tampilData';
+        } else {
+            $view = 'pimpinan/petugas/tampilData';
+        }
+        return view('backend/' . $view, $data);
+
 
     }
 
@@ -54,7 +66,12 @@ class PetugasController extends BaseController
                 'pesan_kosong' => '<strong>Nama / Username yang anda cari tidak ditemukan ! </strong> Silahkan ketik pencarian lainnya',
             ];
             //$data = array_merge($this->dataGlobal, $this->dataController, $data);
-            return view('backend/admin/petugas/tampilData', $data);
+            if ($this->dataGlobal['sesi_level'] == 'admin') {
+                $view = 'admin/petugas/tampilData';
+            } else {
+                $view = 'pimpinan/petugas/tampilData';
+            }
+            return view('backend/' . $view, $data);
         } else {
             if ($level != "") {
                 $data_petugas_search = $this->viewpengguna->where('level', $level)->paginate($this->dataController['setPagination'], 'link');
@@ -67,7 +84,12 @@ class PetugasController extends BaseController
                 'pager' => $this->viewpengguna->pager,
                 'pesan_kosong' => '<strong>Data Petugas Kesehatan Masih Kosong ! </strong> Silahkan Tambah Petugas Kesehatan',
             ];
-            return view('backend/admin/petugas/tampilData', $data);
+            if ($this->dataGlobal['sesi_level'] == 'admin') {
+                $view = 'admin/petugas/tampilData';
+            } else {
+                $view = 'pimpinan/petugas/tampilData';
+            }
+            return view('backend/' . $view, $data);
         }
     }
 

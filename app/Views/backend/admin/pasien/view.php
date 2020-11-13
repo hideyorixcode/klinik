@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-sm-12 text-right">
                             <div class="mb-3">
-                                <a class="btn btn-primary" href="<?= base_url('daftar') ?>"><i
+                                <a class="btn btn-primary" href="<?= base_url('daftar') ?>" target="_blank"><i
                                             class="fas fa-plus"></i>
                                     Tambah
                                 </a>

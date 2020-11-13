@@ -76,6 +76,28 @@
                         </ul>
                         <div class="tab-content">
                             <div id="div_rekam" class="tab-pane active">
+                                <form method="post" enctype="multipart/form-data"
+                                      action="<?= base_url('print-rekam') ?>" target="_blank">
+                                    <?= csrf_field() ?>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <select class="form-control select2"
+                                                    name="id_pasien_fk" id="id_pasien_fk">
+                                                <?php foreach ($dataPasien as $i) : ?>
+                                                    <option value="<?= ($i['id_pasien_fk']) ?>"><?= $i['nama'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <button type="submit" class="btn btn-secondary"><i
+                                                        class="fas fa-print"></i>
+                                                Cetak Rekam Medis Pasien
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <hr/>
                                 <table class="table table-bordered table-striped mb-0" id="rekam_medis_datatable">
                                     <thead class="th-primary">
                                     <tr>
@@ -235,6 +257,7 @@
         });
         table_rekam.on('xhr.dt', function (e, settings, json, xhr) {
             token = json.<?=csrf_token()?>;
+            $('[name="csrf_test_name"]').val(token);
         });
 
         table_konsultasi = $('#konsultasi_datatable').dataTable({
@@ -292,6 +315,7 @@
         });
         table_konsultasi.on('xhr.dt', function (e, settings, json, xhr) {
             token = json.<?=csrf_token()?>;
+            $('[name="csrf_test_name"]').val(token);
         });
 
         table_surat = $('#surat_datatable').dataTable({
@@ -349,9 +373,12 @@
         });
         table_surat.on('xhr.dt', function (e, settings, json, xhr) {
             token = json.<?=csrf_token()?>;
+            $('[name="csrf_test_name"]').val(token);
         });
 
     });
+
+
     // initialize datatable
 
 </script>
