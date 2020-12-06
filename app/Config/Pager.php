@@ -23,7 +23,7 @@ class Pager extends BaseConfig
         'default_head' => 'CodeIgniter\Pager\Views\default_head',
         'smartadmin_pagination' => 'App\Views\Pagers\smartadmin_pagination',
         'bootstrap_pagination' => 'App\Views\Pagers\bootstrap_pagination',
-        'custom_pagination' => 'App\Views\Pagers\custom_pagination',
+        'custom_pagination' => 'App\Views\pagers\custom_pagination',
     ];
 
     /*

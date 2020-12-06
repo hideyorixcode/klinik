@@ -63,6 +63,10 @@
                             <table class="table table-bordered table-striped">
                                 <tbody>
                                 <tr>
+                                    <td class="font-weight-bold">No Pasien</td>
+                                    <td> <?= $dataMaster['nopasien']; ?></td>
+                                </tr>
+                                <tr>
                                     <td class="font-weight-bold">Nama Lengkap</td>
                                     <td><i class="fa fa-address-card"></i> <?= $dataMaster['nama']; ?></td>
                                 </tr>
