@@ -120,16 +120,6 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label>Email</label>
-                                <input type="email"
-                                       class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : ''; ?>"
-                                       id="email" name="email" placeholder="Email Valid"
-                                       value="<?= old('email') ? old('email') : $dataMaster['email'] ?>">
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('email'); ?>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
                                 <label>No Telp.</label>
                                 <input type="text"
                                        class="form-control <?= ($validation->hasError('notelepon')) ? 'is-invalid' : ''; ?>"

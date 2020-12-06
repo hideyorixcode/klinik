@@ -40,12 +40,6 @@
 
 
                             <div class="form-group">
-                                <label class="text-dark">Email</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                                <div class="invalid-feedback" id="error_email"></div>
-                            </div>
-
-                            <div class="form-group">
                                 <label class="text-dark">No Telepon</label>
                                 <input type="number" class="form-control" id="notelepon" name="notelepon">
                                 <div class="invalid-feedback" id="error_notelepon"></div>

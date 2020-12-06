@@ -117,7 +117,7 @@ class PetugasController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+        //$email = strtolower($this->request->getPost('email'));
         $password = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -186,14 +186,14 @@ class PetugasController extends BaseController
                 ]
             ],
 
-            'email' => [
-                'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                'errors' => [
-                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                    'is_unique' => 'email telah digunakan',
-                    'valid_email' => 'Email yang anda input tidak valid',
-                ],
-            ],
+//            'email' => [
+//                'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                'errors' => [
+//                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                    'is_unique' => 'email telah digunakan',
+//                    'valid_email' => 'Email yang anda input tidak valid',
+//                ],
+//            ],
 
         ];
 
@@ -229,7 +229,7 @@ class PetugasController extends BaseController
             }
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'active' => $active,
@@ -285,7 +285,7 @@ class PetugasController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $password = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -296,7 +296,7 @@ class PetugasController extends BaseController
         $active = $this->request->getPost('active');
         $data_pengguna = $data = $this->viewpengguna->where('id', $idDecode)->first();
         $username_lama = $data_pengguna['username'];
-        $email_lama = $data_pengguna['email'];
+//        $email_lama = $data_pengguna['email'];
 
         //validasi
         $rules = [
@@ -351,19 +351,19 @@ class PetugasController extends BaseController
             ];
         }
 
-        if ($email != $email_lama) {
-            $rules += [
-                'email' => [
-                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                    'errors' => [
-                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                        'is_unique' => 'email telah digunakan',
-                        'valid_email' => 'Email yang anda input tidak valid'
-                    ]
-                ],
-
-            ];
-        }
+//        if ($email != $email_lama) {
+//            $rules += [
+//                'email' => [
+//                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                    'errors' => [
+//                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                        'is_unique' => 'email telah digunakan',
+//                        'valid_email' => 'Email yang anda input tidak valid'
+//                    ]
+//                ],
+//
+//            ];
+//        }
 
 
         if (!empty($password_baru)) {
@@ -435,7 +435,7 @@ class PetugasController extends BaseController
 
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'active' => $active,

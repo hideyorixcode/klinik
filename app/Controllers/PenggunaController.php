@@ -81,7 +81,7 @@ class PenggunaController extends BaseController
     {
         $nama = $this->request->getPost('nama');
         $password = $this->request->getPost('password');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
         $level = $this->request->getPost('level');
@@ -137,14 +137,14 @@ class PenggunaController extends BaseController
                 ],
             ],
 
-            'email' => [
-                'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                'errors' => [
-                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                    'is_unique' => 'email telah digunakan',
-                    'valid_email' => 'Email yang anda input tidak valid',
-                ],
-            ],
+//            'email' => [
+//                'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                'errors' => [
+//                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                    'is_unique' => 'email telah digunakan',
+//                    'valid_email' => 'Email yang anda input tidak valid',
+//                ],
+//            ],
 
         ];
 
@@ -186,7 +186,7 @@ class PenggunaController extends BaseController
             }
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'status' => 'admin',
                 'password' => password_hash($password, PASSWORD_BCRYPT),
@@ -232,11 +232,11 @@ class PenggunaController extends BaseController
         $id = $this->request->getPost('id');
         $dataMaster = getDataUser(decodeHash($id));
         $nama_lama = $dataMaster['nama'];
-        $email_lama = $dataMaster['email'];
+//        $email_lama = $dataMaster['email'];
         $username_lama = $dataMaster['username'];
         $nama = $this->request->getPost('nama');
         $password = $this->request->getPost('password');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $username = $this->request->getPost('username');
         $active = $this->request->getPost('active');
         $level = $this->request->getPost('level');
@@ -292,19 +292,19 @@ class PenggunaController extends BaseController
             ];
         }
 
-        if ($email != $email_lama) {
-            $rules += [
-                'email' => [
-                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                    'errors' => [
-                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                        'is_unique' => 'email telah digunakan',
-                        'valid_email' => 'Email yang anda input tidak valid',
-                    ],
-                ],
-
-            ];
-        }
+//        if ($email != $email_lama) {
+//            $rules += [
+//                'email' => [
+//                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                    'errors' => [
+//                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                        'is_unique' => 'email telah digunakan',
+//                        'valid_email' => 'Email yang anda input tidak valid',
+//                    ],
+//                ],
+//
+//            ];
+//        }
 
         if (!empty($password)) {
             $rules += [
@@ -382,7 +382,7 @@ class PenggunaController extends BaseController
 
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'active' => $active,
                 'level' => $level,

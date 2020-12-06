@@ -237,7 +237,6 @@
                     $('#gantijudul').text('UBAH DATA PENGGUNA'); // Set Title to Bootstrap modal title
                     $('[name="id"]').val(id);
                     $('[name="nama"]').val(data.nama);
-                    $('[name="email"]').val(data.email);
                     $('[name="username"]').val(data.username);
                     $('[name="notelepon"]').val(data.notelepon);
                     $('[name="level"]').val(data.level);

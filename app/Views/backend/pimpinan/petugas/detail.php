@@ -75,10 +75,7 @@
                                     <td class="font-weight-bold">Alamat</td>
                                     <td><i class="fa fa-map-marker"></i> <?= $dataMaster['alamat']; ?></td>
                                 </tr>
-                                <tr>
-                                    <td class="font-weight-bold">Email</td>
-                                    <td><i class="fa fa-envelope"></i> <?= $dataMaster['email']; ?></td>
-                                </tr>
+
                                 <tr>
                                     <td class="font-weight-bold">No. Telp</td>
                                     <td><i class="fa fa-phone"></i> <?= $dataMaster['notelepon']; ?></td>

@@ -120,7 +120,7 @@ class PasienController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $password = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -134,7 +134,7 @@ class PasienController extends BaseController
         $bpjs = $this->request->getPost('bpjs');
         $data_pengguna = $data = $this->viewpengguna->where('id', $idDecode)->first();
         $username_lama = $data_pengguna['username'];
-        $email_lama = $data_pengguna['email'];
+//        $email_lama = $data_pengguna['email'];
         $nama_kk = $this->request->getPost('nama_kk');
         $pekerjaan = $this->request->getPost('pekerjaan');
         $agama = $this->request->getPost('agama');
@@ -213,19 +213,19 @@ class PasienController extends BaseController
             ];
         }
 
-        if ($email != $email_lama) {
-            $rules += [
-                'email' => [
-                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                    'errors' => [
-                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                        'is_unique' => 'email telah digunakan',
-                        'valid_email' => 'Email yang anda input tidak valid'
-                    ]
-                ],
-
-            ];
-        }
+//        if ($email != $email_lama) {
+//            $rules += [
+//                'email' => [
+//                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                    'errors' => [
+//                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                        'is_unique' => 'email telah digunakan',
+//                        'valid_email' => 'Email yang anda input tidak valid'
+//                    ]
+//                ],
+//
+//            ];
+//        }
 
 
         if (!empty($password_baru)) {
@@ -297,7 +297,7 @@ class PasienController extends BaseController
 
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'active' => $active,

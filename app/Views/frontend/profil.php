@@ -65,10 +65,6 @@
                                     <td><i class="fa fa-map-marker"></i> <?= $sesi_alamat; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="font-weight-bold">Email</td>
-                                    <td><i class="fa fa-envelope"></i> <?= $sesi_email; ?></td>
-                                </tr>
-                                <tr>
                                     <td class="font-weight-bold">No. Telp</td>
                                     <td><i class="fa fa-phone"></i> <?= $sesi_notelepon; ?></td>
                                 </tr>
@@ -182,16 +178,7 @@
                                     <?= $validation->getError('username'); ?>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>Email</label>
-                                <input type="email"
-                                       class="form-control <?= ($validation->hasError('email')) ? 'is-invalid' : '' ?>"
-                                       id="email" name="email" placeholder="Email Valid"
-                                       value="<?= old('email') ? old('email') : $sesi_email ?>">
-                                <div class="invalid-feedback">
-                                    <?= $validation->getError('email'); ?>
-                                </div>
-                            </div>
+
                             <div class="form-group col-md-4">
                                 <label>No Telp.</label>
                                 <input type="text"

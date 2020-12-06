@@ -96,7 +96,7 @@
                              data-lock-picture="<?= base_url('public/uploads/thumbs/' . $sesi_avatar) ?>"/>
                     </figure>
                     <div class="profile-info" data-lock-name="<?= $sesi_username; ?>"
-                         data-lock-email="<?= $sesi_email; ?>">
+                         data-lock-email="ngehek@gmail.com">
                         <span class="name"><?= $sesi_username; ?></span>
                         <span class="role"><?= $sesi_level; ?></span>
                     </div>

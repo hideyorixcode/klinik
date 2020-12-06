@@ -44,10 +44,10 @@ class HomeController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $data_pengguna = $this->read_by_id($id);
         $username_lama = $data_pengguna['username'];
-        $email_lama = $data_pengguna['email'];
+//        $email_lama = $data_pengguna['email'];
         $password_baru = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -88,19 +88,19 @@ class HomeController extends BaseController
             ];
         }
 
-        if ($email != $email_lama) {
-            $rules += [
-                'email' => [
-                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                    'errors' => [
-                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                        'is_unique' => 'email telah digunakan',
-                        'valid_email' => 'Email yang anda input tidak valid'
-                    ]
-                ],
-
-            ];
-        }
+//        if ($email != $email_lama) {
+//            $rules += [
+//                'email' => [
+//                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                    'errors' => [
+//                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                        'is_unique' => 'email telah digunakan',
+//                        'valid_email' => 'Email yang anda input tidak valid'
+//                    ]
+//                ],
+//
+//            ];
+//        }
 
 
         if (!empty($password_baru)) {
@@ -172,7 +172,7 @@ class HomeController extends BaseController
 
             $data = [
                 'username' => $username,
-                'email' => $email,
+//                'email' => $email,
                 'nama' => $nama,
                 'notelepon' => $notelepon,
                 'jk' => $jk,
@@ -223,10 +223,10 @@ class HomeController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $data_pengguna = $this->read_by_id($id);
         $username_lama = $data_pengguna['username'];
-        $email_lama = $data_pengguna['email'];
+//        $email_lama = $data_pengguna['email'];
         $password_baru = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -304,19 +304,19 @@ class HomeController extends BaseController
             ];
         }
 
-        if ($email != $email_lama) {
-            $rules += [
-                'email' => [
-                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                    'errors' => [
-                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                        'is_unique' => 'email telah digunakan',
-                        'valid_email' => 'Email yang anda input tidak valid'
-                    ]
-                ],
-
-            ];
-        }
+//        if ($email != $email_lama) {
+//            $rules += [
+//                'email' => [
+//                    'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                    'errors' => [
+//                        'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                        'is_unique' => 'email telah digunakan',
+//                        'valid_email' => 'Email yang anda input tidak valid'
+//                    ]
+//                ],
+//
+//            ];
+//        }
 
 
         if (!empty($password_baru)) {
@@ -388,7 +388,7 @@ class HomeController extends BaseController
 
             $data = [
                 'username' => $username,
-                'email' => $email,
+//                'email' => $email,
                 'nama' => $nama,
                 'notelepon' => $notelepon,
                 'jk' => $jk,
@@ -557,7 +557,7 @@ class HomeController extends BaseController
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $notelepon = $this->request->getPost('notelepon');
-        $email = strtolower($this->request->getPost('email'));
+//        $email = strtolower($this->request->getPost('email'));
         $password = $this->request->getPost('password');
         $alamat = $this->request->getPost('alamat');
         $jk = $this->request->getPost('jk');
@@ -620,14 +620,14 @@ class HomeController extends BaseController
                     'matches' => 'Konfirmasi password harus sama',
                 ],
             ],
-            'email' => [
-                'rules' => 'required|valid_email|is_unique[pengguna.email]',
-                'errors' => [
-                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
-                    'is_unique' => 'email telah digunakan',
-                    'valid_email' => 'Email yang anda input tidak valid',
-                ],
-            ],
+//            'email' => [
+//                'rules' => 'required|valid_email|is_unique[pengguna.email]',
+//                'errors' => [
+//                    'required' => 'Email Wajib diisi dan tidak boleh kosong',
+//                    'is_unique' => 'email telah digunakan',
+//                    'valid_email' => 'Email yang anda input tidak valid',
+//                ],
+//            ],
 
             'gol_darah' => [
                 'rules' => 'required',
@@ -687,7 +687,7 @@ class HomeController extends BaseController
             }
             $data = [
                 'nama' => $nama,
-                'email' => $email,
+//                'email' => $email,
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'active' => $active,

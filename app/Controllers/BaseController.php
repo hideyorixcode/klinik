@@ -106,7 +106,7 @@ class BaseController extends Controller
                 'sesi_nama' => $data_pengguna['nama'],
                 'sesi_notelepon' => $data_pengguna['notelepon'],
                 'sesi_avatar' => $img_avatar,
-                'sesi_email' => $data_pengguna['email'],
+//                'sesi_email' => $data_pengguna['email'],
                 'sesi_active' => $data_pengguna['active'],
                 'sesi_level' => $data_pengguna['level'],
                 'sesi_id_poli_fk' => $data_pengguna['id_poli_fk'],
