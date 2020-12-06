@@ -38,7 +38,14 @@
             <section class="card">
                 <header class="card-header">
                     <div class="card-actions">
-                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <select class="form-control"
+                                name="status" id="status">
+                            <option value="tunda">TUNDA</option>
+                            <option value="proses">PROSES</option>
+                            <option value="batal">BATAL</option>
+                            <option value="selesai">SELESAI</option>
+                            <option value="">Seluruh Status</option>
+                        </select>
                     </div>
 
                     <h2 class="card-title">Layanan Klinik</h2>
@@ -104,7 +111,8 @@
                                         <th width="5%">No.</th>
                                         <th width="10%">Jadwal</th>
                                         <th width="5%">No Urut</th>
-                                        <th width="30%">Nama Pasien</th>
+                                        <th width="10%">ID Pasien</th>
+                                        <th width="15%">Nama Pasien</th>
                                         <th width="25">Poli</th>
                                         <th width="5%">Status</th>
                                         <th width="15%"></th>
@@ -217,6 +225,7 @@
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Rekam Medis';
                     d.idpetugas_fk = <?=$sesi_id_decode?>;
+                    d.status = $('#status').val();
 
 
                 }
@@ -234,11 +243,11 @@
             },
                 {
                     "className": "dt-center",
-                    "targets": [0, 1, 2, 6]
+                    "targets": [0, 1, 2, 7]
                 },
                 {
                     "orderable": false,
-                    "targets": [0, 1, 6]
+                    "targets": [0, 1, 7]
                 },
             ],
             language: {
@@ -276,6 +285,7 @@
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Konsultasi';
                     d.idpetugas_fk = <?=$sesi_id_decode?>;
+                    d.status = $('#status').val();
 
 
                 }
@@ -335,6 +345,7 @@
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Pembuatan Surat';
                     d.idpetugas_fk = <?=$sesi_id_decode?>;
+                    d.status = $('#status').val();
 
 
                 }
@@ -376,6 +387,12 @@
             $('[name="csrf_test_name"]').val(token);
         });
 
+    });
+
+    $("#status").change(function () {
+        table_surat.DataTable().ajax.reload(null, true);
+        table_konsultasi.DataTable().ajax.reload(null, true);
+        table_rekam.DataTable().ajax.reload(null, true);
     });
 
 

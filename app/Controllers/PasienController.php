@@ -11,14 +11,44 @@ class PasienController extends BaseController
 
     public function index()
     {
-        $data = [
-            'judul' => 'Daftar Pasien',
-        ];
-        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+
         if ($this->dataGlobal['sesi_level'] == 'admin') {
             $view = 'admin/pasien/view';
+            $data = [
+                'judul' => 'Daftar Pasien',
+            ];
+            $data = array_merge($this->dataGlobal, $this->dataController, $data);
         } else {
+            if ($this->dataGlobal['sesi_level'] == 'dokter' || $this->dataGlobal['sesi_level'] == 'bidan') {
+                $idpetugas_fk = $this->dataGlobal['sesi_id_decode'];
+                $query = $this->db->query("SELECT distinct(id_pasien_fk) FROM vdaftar where idpetugas_fk=$idpetugas_fk");
+                $data_pengguna = $query->getResultArray();
+                if (count($data_pengguna) > 0) {
+                    foreach ($data_pengguna as $term) {
+                        $output[] = $term['id_pasien_fk'];
+                    }
+                    //$idpasiennya = "'" . implode ( "', '", $output ) . "'";
+                    $idpasiennya = implode(', ', $output);
+                    $data = [
+                        'judul' => 'Daftar Pasien',
+                        'idpasiennya' => $idpasiennya,
+                    ];
+                } else {
+                    $data = [
+                        'judul' => 'Daftar Pasien',
+                        'idpasiennya' => '999999',
+                    ];
+                }
+            } else {
+                $data = [
+                    'judul' => 'Daftar Pasien',
+                    'idpasiennya' => '',
+                ];
+            }
+
             $view = 'pimpinan/pasien/view';
+
+            $data = array_merge($this->dataGlobal, $this->dataController, $data);
         }
         return view('backend/' . $view, $data);
 
@@ -35,7 +65,7 @@ class PasienController extends BaseController
                 $no++;
                 $row = [];
                 $row[] = '<input type="checkbox" class="data-check" value="' . encodeHash($list->id) . '">';
-                $row[] = $no;
+                $row[] = $list->nopasien;
                 $row[] = $list->username;
                 $row[] = $list->nama;
                 $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
@@ -44,7 +74,7 @@ class PasienController extends BaseController
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
                 $gambarnya = $list->avatar ? $list->avatar : 'user.png';
                 $row[] = '<figure class="image rounded"><a href="' . base_url('public/uploads/' . $gambarnya) . '" target="_blank"><img src="' . base_url('public/uploads/thumbs/' . $gambarnya) . '"  width="35px;" height="35px;" alt="" class="rounded-circle"/></a></figure>';
-                $row[] = '<a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/pasien/edit/' . encodeHash($list->id)) . '" class="btn btn-info btn-xs waves-effect waves-themed" title="Edit"><span class="fas fa-edit" aria-hidden="true"></span></a>
+                $row[] = '<a href="' . base_url('print-pasien/' . encodeHash($list->id)) . '" class="btn btn-secondary btn-xs waves-effect waves-themed" title="Cetak" target="_blank"><span class="fas fa-print" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/pasien/edit/' . encodeHash($list->id)) . '" class="btn btn-info btn-xs waves-effect waves-themed" title="Edit"><span class="fas fa-edit" aria-hidden="true"></span></a>
      <a href="javascript:void(0);" class="btn btn-danger btn-xs waves-effect waves-themed" title="Delete" onclick="delete_pasien(' . "'" . encodeHash($list->id) . "'" . ')"><span class="fas fa-trash" aria-hidden="true"> </span></a>';
                 $row[] = '';
 
@@ -71,7 +101,7 @@ class PasienController extends BaseController
                 $no++;
                 $row = [];
 
-                $row[] = $no;
+                $row[] = $list->nopasien;
                 $row[] = $list->username;
                 $row[] = $list->nama;
                 $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
@@ -80,7 +110,43 @@ class PasienController extends BaseController
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
                 $gambarnya = $list->avatar ? $list->avatar : 'user.png';
                 $row[] = '<figure class="image rounded"><a href="' . base_url('public/uploads/' . $gambarnya) . '" target="_blank"><img src="' . base_url('public/uploads/thumbs/' . $gambarnya) . '"  width="35px;" height="35px;" alt="" class="rounded-circle"/></a></figure>';
-                $row[] = '<a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a>';
+                $row[] = '<a href="' . base_url('print-pasien/' . encodeHash($list->id)) . '" class="btn btn-secondary btn-xs waves-effect waves-themed" title="Cetak" target="_blank"><span class="fas fa-print" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a>';
+                $row[] = '';
+
+                $data[] = $row;
+            }
+            $output = ["draw" => $this->reqService->getPost('draw'),
+                "recordsTotal" => $mpasien->count_all(),
+                "recordsFiltered" => $mpasien->count_filtered(),
+                "data" => $data];
+            $output[csrf_token()] = csrf_hash();
+            echo json_encode($output);
+        }
+
+    }
+
+
+    public function read_dokter()
+    {
+        $mpasien = $this->viewpasien;
+        if ($this->reqService->getMethod(true) == 'POST') {
+            $lists = $mpasien->get_datatables();
+            $data = [];
+            $no = $this->reqService->getPost("start");
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+
+                $row[] = $list->nopasien;
+                $row[] = $list->username;
+                $row[] = $list->nama;
+                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
+                $row[] = $list->jk;
+                $row[] = $list->alamat;
+                $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
+                $gambarnya = $list->avatar ? $list->avatar : 'user.png';
+                $row[] = '<figure class="image rounded"><a href="' . base_url('public/uploads/' . $gambarnya) . '" target="_blank"><img src="' . base_url('public/uploads/thumbs/' . $gambarnya) . '"  width="35px;" height="35px;" alt="" class="rounded-circle"/></a></figure>';
+                $row[] = '<a href="' . base_url('print-pasien/' . encodeHash($list->id)) . '" class="btn btn-secondary btn-xs waves-effect waves-themed" title="Cetak" target="_blank"><span class="fas fa-print" aria-hidden="true"></span></a> <a href="' . base_url('dashboard/pasien/detail/' . encodeHash($list->id)) . '" class="btn btn-dark btn-xs waves-effect waves-themed" title="Detail"><span class="fas fa-eye" aria-hidden="true"></span></a>';
                 $row[] = '';
 
                 $data[] = $row;

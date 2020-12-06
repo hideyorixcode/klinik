@@ -45,6 +45,8 @@ $routes->get('print-layanan/(:any)', 'HomeController::print_layanan/$1', ['filte
 $routes->get('print-konsultasi/(:any)', 'HomeController::print_konsultasi/$1', ['filter' => 'ceklogin']);
 $routes->get('print-surat/(:any)', 'HomeController::print_surat/$1', ['filter' => 'ceklogin']);
 $routes->post('print-rekam', 'HomeController::print_rekam/', ['filter' => 'ceklogin']);
+$routes->get('cek/', 'HomeController::cek/', ['filter' => 'ceklogin']);
+$routes->get('print-pasien/(:any)', 'HomeController::print_pasien/$1', ['filter' => 'ceklogin']);
 
 /**
  * --------------------------------------------------------------------

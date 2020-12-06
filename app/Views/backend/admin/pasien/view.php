@@ -78,9 +78,9 @@
                         <thead class="th-primary">
                         <tr>
                             <th width="5%">#</th>
-                            <th width="5%">No.</th>
+                            <th width="10%">ID</th>
                             <th width="10%" class="all">Username</th>
-                            <th width="15%" class="all">Nama</th>
+                            <th width="10%" class="all">Nama</th>
                             <th width="10%">BPJS</th>
                             <th width="10%">JK</th>
                             <th width="15%">Alamat</th>

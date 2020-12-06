@@ -43,6 +43,7 @@ class LayananController extends BaseController
                 $row[] = $no;
                 $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
                 $row[] = $list->nomor_urut;
+                $row[] = ' [' . $list->nopasien . ']';
                 $row[] = $list->nama;
                 $row[] = '<a target="_blank" href="' . base_url('detail-petugas/' . encodeHash($list->idpetugas_fk)) . '">' . $list->nama_petugas . '</a>';
                 $row[] = $list->nama_poli;
@@ -83,7 +84,7 @@ class LayananController extends BaseController
     {
         $mlayanan = $this->viewdaftar;
         if ($this->reqService->getMethod(true) == 'POST') {
-            $lists = $mlayanan->get_datatables_admin();
+            $lists = $mlayanan->get_datatables_petugas();
             $data = [];
             $no = $this->reqService->getPost("start");
             foreach ($lists as $list) {
@@ -92,6 +93,7 @@ class LayananController extends BaseController
                 $row[] = $no;
                 $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
                 $row[] = $list->nomor_urut;
+                $row[] = ' [' . $list->nopasien . ']';
                 $row[] = $list->nama;
                 $row[] = $list->nama_poli;
                 if ($list->status == 'tunda') {
@@ -118,8 +120,8 @@ class LayananController extends BaseController
                 $data[] = $row;
             }
             $output = ["draw" => $this->reqService->getPost('draw'),
-                "recordsTotal" => $mlayanan->count_all_admin(),
-                "recordsFiltered" => $mlayanan->count_filtered_admin(),
+                "recordsTotal" => $mlayanan->count_all_petugas(),
+                "recordsFiltered" => $mlayanan->count_filtered_petugas(),
                 "data" => $data];
             $output[csrf_token()] = csrf_hash();
             echo json_encode($output);
@@ -140,7 +142,6 @@ class LayananController extends BaseController
                 $row[] = $no;
                 $row[] = $list->hari . ', ' . $list->dari . '-' . $list->sampai;
                 $row[] = $list->nomor_urut;
-                $row[] = $list->nama;
                 $row[] = '<a target="_blank" href="' . base_url('detail-petugas/' . encodeHash($list->idpetugas_fk)) . '">' . $list->nama_petugas . '</a>';
                 $row[] = $list->nama_poli;
                 if ($list->status == 'tunda') {

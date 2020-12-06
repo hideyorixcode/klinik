@@ -38,7 +38,14 @@
             <section class="card">
                 <header class="card-header">
                     <div class="card-actions">
-                        <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+                        <select class="form-control"
+                                name="status" id="status">
+                            <option value="tunda">TUNDA</option>
+                            <option value="proses">PROSES</option>
+                            <option value="batal">BATAL</option>
+                            <option value="selesai">SELESAI</option>
+                            <option value="">Seluruh Status</option>
+                        </select>
                     </div>
 
                     <h2 class="card-title">Layanan Klinik</h2>
@@ -219,6 +226,7 @@
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Rekam Medis';
+                    d.status = $('#status').val();
 
 
                 }
@@ -277,6 +285,7 @@
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Konsultasi';
+                    d.status = $('#status').val();
 
 
                 }
@@ -335,6 +344,7 @@
                 data: function (d) {
                     d.<?= csrf_token() ?> = token;
                     d.layanan = 'Pembuatan Surat';
+                    d.status = $('#status').val();
 
 
                 }
@@ -378,6 +388,11 @@
 
     });
 
+    $("#status").change(function () {
+        table_surat.DataTable().ajax.reload(null, true);
+        table_konsultasi.DataTable().ajax.reload(null, true);
+        table_rekam.DataTable().ajax.reload(null, true);
+    });
 
     // initialize datatable
 

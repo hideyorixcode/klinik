@@ -9,8 +9,8 @@ class VDaftarModel extends Model
 {
     protected $table = "vdaftar";
     protected $column_order = array(null, null, 'nomor_urut', 'tgl_daftar', 'nama_petugas', 'nama_poli', 'status');
-    protected $column_order_admin = array(null, null, 'nomor_urut', 'nama', 'tgl_daftar', 'nama_petugas', 'nama_poli', 'status');
-    protected $column_order_petugas = array(null, null, 'nomor_urut', 'nama', 'tgl_daftar', 'nama_poli', 'status');
+    protected $column_order_admin = array(null, null, 'nomor_urut', 'nopasien', 'nama', 'tgl_daftar', 'nama_petugas', 'nama_poli', 'status');
+    protected $column_order_petugas = array(null, null, 'nomor_urut', 'nopasien', 'nama', 'tgl_daftar', 'nama_poli', 'status');
     protected $column_search = array('nama_petugas', 'nama_poli', 'nama');
     protected $order = array('id_daftar' => 'desc');
     protected $request;
@@ -96,9 +96,14 @@ class VDaftarModel extends Model
     private function _get_datatables_query_admin()
     {
         $layanan = $this->request->getPost('layanan');
+        $status = $this->request->getPost('status');
 
         if ($layanan != "") {
             $this->dt->where('layanan', $layanan);
+        }
+
+        if ($status != "") {
+            $this->dt->where('status', $status);
         }
 
         $i = 0;
@@ -133,8 +138,12 @@ class VDaftarModel extends Model
     public function count_all_admin()
     {
         $layanan = $this->request->getPost('layanan');
+        $status = $this->request->getPost('status');
         if ($layanan != "") {
             $this->dt->where('layanan', $layanan);
+        }
+        if ($status != "") {
+            $this->dt->where('status', $status);
         }
         return $this->dt->countAllResults();
     }
@@ -151,11 +160,15 @@ class VDaftarModel extends Model
     private function _get_datatables_query_petugas()
     {
         $idpetugas_fk = $this->request->getPost('idpetugas_fk');
+        $status = $this->request->getPost('status');
         $this->dt->where('idpetugas_fk', ($idpetugas_fk));
         $layanan = $this->request->getPost('layanan');
 
         if ($layanan != "") {
             $this->dt->where('layanan', $layanan);
+        }
+        if ($status != "") {
+            $this->dt->where('status', $status);
         }
 
         $i = 0;
@@ -190,10 +203,14 @@ class VDaftarModel extends Model
     public function count_all_petugas()
     {
         $idpetugas_fk = $this->request->getPost('idpetugas_fk');
+        $status = $this->request->getPost('status');
         $this->dt->where('idpetugas_fk', ($idpetugas_fk));
         $layanan = $this->request->getPost('layanan');
         if ($layanan != "") {
             $this->dt->where('layanan', $layanan);
+        }
+        if ($status != "") {
+            $this->dt->where('status', $status);
         }
         return $this->dt->countAllResults();
     }

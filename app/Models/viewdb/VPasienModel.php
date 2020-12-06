@@ -8,8 +8,8 @@ use CodeIgniter\Model;
 class VPasienModel extends Model
 {
     protected $table = "vpengguna";
-    protected $column_order = array(null, null, 'username', 'nama', 'bpjs', 'jk', 'alamat', 'active');
-    protected $column_search = array('username', 'nama');
+    protected $column_order = array(null, 'nopasien', 'username', 'nama', 'bpjs', 'jk', 'alamat', 'active');
+    protected $column_search = array('username', 'nama', 'nopasien');
     protected $order = array('id' => 'desc');
     protected $request;
     protected $db;
@@ -36,9 +36,14 @@ class VPasienModel extends Model
     {
         $this->dt->where('level', 'pasien');
         $bpjs = $this->request->getPost('bpjs');
+        $idpasien = $this->request->getPost('idpasien');
         if ($bpjs != "") {
             $this->dt->where('bpjs', $bpjs);
         }
+        if ($idpasien != "") {
+            $this->dt->whereIn('id', $idpasien);
+        }
+        //$this->dt->whereIn('id', ['55','58']);
         $i = 0;
         foreach ($this->column_search as $item) {
             if ($this->request->getPost('search')['value']) {
@@ -75,6 +80,11 @@ class VPasienModel extends Model
         if ($bpjs != "") {
             $this->dt->where('bpjs', $bpjs);
         }
+        $idpasien = $this->request->getPost('idpasien');
+        if ($idpasien != "") {
+            $this->dt->whereIn('id', $idpasien);
+        }
+        // $this->dt->whereIn('id', ['55','58']);
         return $this->dt->countAllResults();
     }
 

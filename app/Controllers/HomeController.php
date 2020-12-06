@@ -556,6 +556,7 @@ class HomeController extends BaseController
     {
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
+        $nopasien = 'P-' . date('dmy') . '-' . rand(100, 1000);
         $notelepon = $this->request->getPost('notelepon');
 //        $email = strtolower($this->request->getPost('email'));
         $password = $this->request->getPost('password');
@@ -689,6 +690,7 @@ class HomeController extends BaseController
                 'nama' => $nama,
 //                'email' => $email,
                 'username' => $username,
+                'nopasien' => $nopasien,
                 'password' => password_hash($password, PASSWORD_BCRYPT),
                 'active' => $active,
                 'notelepon' => $notelepon,
@@ -1044,6 +1046,31 @@ class HomeController extends BaseController
         ];
         $data = array_merge($this->dataGlobal, $this->dataController, $data);
         return view('frontend/print_rekam', $data);
+    }
+
+    public function print_pasien($id_pasien_fk)
+    {
+        // dd($this->mpengguna->where('level', 'pimpinan')->first());
+        $data = [
+            'judul' => 'Print Data Pasien',
+            'dataMaster' => $this->viewpengguna->where('id', decodeHash($id_pasien_fk))->first(),
+            'namaPimpinan' => $this->mpengguna->where('level', 'pimpinan')->first()['nama'],
+
+        ];
+        $data = array_merge($this->dataGlobal, $this->dataController, $data);
+        return view('frontend/print_pasien', $data);
+    }
+
+    public function cek()
+    {
+        $query = $this->db->query("SELECT distinct(id_pasien_fk) FROM vdaftar where idpetugas_fk=56");
+        //dd($query->getResultArray()[0]);
+        $data_pengguna = $query->getResultArray();
+        foreach ($data_pengguna as $term) {
+            $output[] = $term['id_pasien_fk'];
+        }
+        echo implode(', ', $output);
+        //dd($data_pengguna);
     }
 
 }

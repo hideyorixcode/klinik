@@ -98,7 +98,7 @@
                     <div class="profile-info" data-lock-name="<?= $sesi_username; ?>"
                          data-lock-email="ngehek@gmail.com">
                         <span class="name"><?= $sesi_username; ?></span>
-                        <span class="role"><?= $sesi_level; ?></span>
+                        <span class="role"><?= $sesi_nopasien; ?></span>
                     </div>
 
                     <i class="fa custom-caret"></i>

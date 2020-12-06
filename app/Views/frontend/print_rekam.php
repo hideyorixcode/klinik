@@ -73,6 +73,7 @@
                             <th class="font-weight-semibold">Obyektif</th>
                             <th class="font-weight-semibold">Assesment</th>
                             <th class="font-weight-semibold">Planning</th>
+                            <th class="font-weight-semibold">Petugas Kesehatan</th>
                             <th class="font-weight-semibold">T. Tangan</th>
                         </tr>
                         </thead>
@@ -85,6 +86,7 @@
                                 <td><?= $data['obyektif'] ?></td>
                                 <td><?= $data['assesment'] ?></td>
                                 <td><?= $data['planning'] ?></td>
+                                <td><?= $data['nama_petugas'] ?></td>
                                 <td></td>
                             </tr>
                         <?php endforeach; ?>

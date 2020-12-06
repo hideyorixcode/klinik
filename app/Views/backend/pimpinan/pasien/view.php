@@ -68,9 +68,9 @@
                     <table class="table table-bordered table-striped mb-0" id="hideyori_datatable">
                         <thead class="th-primary">
                         <tr>
-                            <th width="5%">No.</th>
+                            <th width="10%">ID</th>
                             <th width="10%" class="all">Username</th>
-                            <th width="15%" class="all">Nama</th>
+                            <th width="10%" class="all">Nama</th>
                             <th width="10%">BPJS</th>
                             <th width="10%">JK</th>
                             <th width="15%">Alamat</th>
@@ -134,6 +134,8 @@
                 data: function (d) {
                     d.<?=csrf_token()?> = token;
                     d.bpjs = $('#bpjs').val();
+                    d.idpasien = [<?=$idpasiennya; ?>];
+
                 }
             },
             responsive: {
