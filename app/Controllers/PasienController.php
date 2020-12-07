@@ -12,10 +12,13 @@ class PasienController extends BaseController
     public function index()
     {
 
+        $db = \Config\Database::connect();
+        $tahunPasien = $this->viewpasien->select('DATE_FORMAT(created_at, "%Y") as tahun')->groupBy("DATE_FORMAT(created_at, '%Y')")->find();
         if ($this->dataGlobal['sesi_level'] == 'admin') {
             $view = 'admin/pasien/view';
             $data = [
                 'judul' => 'Daftar Pasien',
+                'tahunPasien' => $tahunPasien,
             ];
             $data = array_merge($this->dataGlobal, $this->dataController, $data);
         } else {
@@ -32,17 +35,20 @@ class PasienController extends BaseController
                     $data = [
                         'judul' => 'Daftar Pasien',
                         'idpasiennya' => $idpasiennya,
+                        'tahunPasien' => $tahunPasien,
                     ];
                 } else {
                     $data = [
                         'judul' => 'Daftar Pasien',
                         'idpasiennya' => '999999',
+                        'tahunPasien' => $tahunPasien,
                     ];
                 }
             } else {
                 $data = [
                     'judul' => 'Daftar Pasien',
                     'idpasiennya' => '',
+                    'tahunPasien' => $tahunPasien,
                 ];
             }
 
