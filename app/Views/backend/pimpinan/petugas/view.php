@@ -41,7 +41,7 @@
                         <div class="content">
                             <?= $this->include('backend/loaderData'); ?>
                             <div id="getViewData">
-                                <?= $this->include('backend/pimpinan/petugas/tampildata'); ?>
+                                <?= $this->include('backend/pimpinan/petugas/tampilData'); ?>
                             </div>
                         </div>
                     </div>
