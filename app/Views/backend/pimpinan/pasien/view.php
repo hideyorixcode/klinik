@@ -56,6 +56,35 @@
                             </select>
                         </div>
 
+                        <div class="form-group col-md-3">
+                            <select name="bulan" id="bulan"
+                                    class="form-control">
+                                <option value="">-Seluruh Bulan-</option>
+                                <option value="01">JANUARI</option>
+                                <option value="02">FEBRUARI</option>
+                                <option value="03">MARET</option>
+                                <option value="04">APRIL</option>
+                                <option value="05">MEI</option>
+                                <option value="06">JUNI</option>
+                                <option value="07">JULI</option>
+                                <option value="08">AGUSTUS</option>
+                                <option value="09">SEPTEMBER</option>
+                                <option value="10">OKTOBER</option>
+                                <option value="11">NOVEMBER</option>
+                                <option value="12">DESEMBER</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <select name="tahun" id="tahun"
+                                    class="form-control">
+                                <option value="">-Seluruh Tahun-</option>
+                                <?php foreach ($tahunPasien as $t) : ?>
+                                    <option value="<?= $t['tahun'] ?>"><?= $t['tahun'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
 
                         <div class="form-group col-md-3">
                             <button onclick="reload_table();" class="btn btn-secondary"><i
@@ -135,6 +164,8 @@
                     d.<?=csrf_token()?> = token;
                     d.bpjs = $('#bpjs').val();
                     d.idpasien = [<?=$idpasiennya; ?>];
+                    d.bulan = $('#bulan').val();
+                    d.tahun = $('#tahun').val();
 
                 }
             },

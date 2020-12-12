@@ -43,6 +43,14 @@ class VPasienModel extends Model
         if ($idpasien != "") {
             $this->dt->whereIn('id', $idpasien);
         }
+        $bulan = $this->request->getPost('bulan');
+        $tahun = $this->request->getPost('tahun');
+        if ($bulan != "") {
+            $this->dt->where('DATE_FORMAT(created_at, "%m")', $bulan);
+        }
+        if ($tahun != "") {
+            $this->dt->where('DATE_FORMAT(created_at, "%Y")', $tahun);
+        }
         //$this->dt->whereIn('id', ['55','58']);
         $i = 0;
         foreach ($this->column_search as $item) {
@@ -83,6 +91,14 @@ class VPasienModel extends Model
         $idpasien = $this->request->getPost('idpasien');
         if ($idpasien != "") {
             $this->dt->whereIn('id', $idpasien);
+        }
+        $bulan = $this->request->getPost('bulan');
+        $tahun = $this->request->getPost('tahun');
+        if ($bulan != "") {
+            $this->dt->where('DATE_FORMAT(created_at, "%m")', $bulan);
+        }
+        if ($tahun != "") {
+            $this->dt->where('DATE_FORMAT(created_at, "%Y")', $tahun);
         }
         // $this->dt->whereIn('id', ['55','58']);
         return $this->dt->countAllResults();
