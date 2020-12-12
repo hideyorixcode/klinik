@@ -59,9 +59,9 @@
                         <div class="form-group col-md-3">
                             <select name="bpjs" id="bpjs"
                                     class="form-control">
-                                <option value="">-Seluruh Pasien-</option>
-                                <option value="YA">PASIEN BPJS</option>
-                                <option value="TIDAK">PASIEN NON BPJS</option>
+                                <option value="">-Jenis Pasien-</option>
+                                <option value="YA">BPJS</option>
+                                <option value="TIDAK">UMUM</option>
                             </select>
                         </div>
 
@@ -81,7 +81,7 @@
                             <th width="10%">ID</th>
                             <th width="10%" class="all">Username</th>
                             <th width="10%" class="all">Nama</th>
-                            <th width="10%">BPJS</th>
+                            <th width="10%">Jenis Pasien</th>
                             <th width="10%">JK</th>
                             <th width="15%">Alamat</th>
                             <th width="10%">Active</th>

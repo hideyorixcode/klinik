@@ -286,7 +286,7 @@ class HomeController extends BaseController
             'bpjs' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'pilih tidak jika tidak menggunakan kartu BPJS'
+                    'required' => 'pilih jenis pasien (bpjs/umum)'
                 ]
             ],
         ];
@@ -651,7 +651,7 @@ class HomeController extends BaseController
             'bpjs' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'pilih tidak jika tidak menggunakan kartu BPJS'
+                    'required' => 'pilih jenis pasien (bpjs/umum)'
                 ]
             ],
         ];

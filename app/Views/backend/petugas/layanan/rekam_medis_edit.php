@@ -121,7 +121,7 @@
                             <div class="col-sm-9">
                                 <input type="text" id="nomor_rekam" name="nomor_rekam"
                                        class="form-control <?= ($validation->hasError('nomor_rekam')) ? 'is-invalid' : '' ?>"
-                                       placeholder="Nomor Rekam Medis" required autofocus
+                                       placeholder="Nomor Rekam Medis" readonly
                                        value="<?= old('nomor_rekam') ? old('nomor_rekam') : $dataMaster['nomor_rekam'] ?>">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('nomor_rekam'); ?>

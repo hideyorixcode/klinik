@@ -231,14 +231,14 @@
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label>Pasien BPJS</label>
+                                    <label>Jenis Pasien</label>
                                     <?php $selected_bpjs = old('bpjs') ? old('bpjs') : $dataMaster['bpjs']; ?>
                                     <select name="bpjs" id="bpjs"
                                             class="form-control  <?= ($validation->hasError('bpjs')) ? 'is-invalid' : '' ?>">
                                         <option <?= $selected_bpjs == 'YA' ? 'selected' : ''; ?> value="YA">
-                                            YA
+                                            BPJS
                                         </option>
-                                        <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">TIDAK
+                                        <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">UMUM
                                         </option>
                                     </select>
                                     <div class="invalid-feedback">

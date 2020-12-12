@@ -69,8 +69,8 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="font-weight-bold">BPJS</td>
-                                        <td><?= $dataMaster['bpjs'] == 'YA' ? '<span class="fas fa-circle fa-xs" style="color: green"> YA</span>' : '<span class="fas fa-circle fa-xs" style="color: red"> TIDAK</span>' ?></td>
+                                        <td class="font-weight-bold">Jenis Pasien</td>
+                                        <td><?= $dataMaster['bpjs'] == 'YA' ? '<span class="fas fa-circle fa-xs" style="color: green"> BPJS</span>' : '<span class="fas fa-circle fa-xs" style="color: red"> UMUM</span>' ?></td>
                                     </tr>
 
                                     <tr>

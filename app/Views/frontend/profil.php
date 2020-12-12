@@ -85,8 +85,8 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="font-weight-bold">BPJS</td>
-                                    <td><?= $sesi_bpjs == 'YA' ? '<span class="fas fa-circle fa-xs" style="color: green"> YA</span>' : '<span class="fas fa-circle fa-xs" style="color: red"> TIDAK</span>' ?></td>
+                                    <td class="font-weight-bold">Jenis Pasien</td>
+                                    <td><?= $sesi_bpjs == 'YA' ? '<span class="fas fa-circle fa-xs" style="color: green"> BPJS</span>' : '<span class="fas fa-circle fa-xs" style="color: red"> UMUM</span>' ?></td>
                                 </tr>
 
                                 <tr>
@@ -300,14 +300,14 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label>Pasien BPJS</label>
+                                <label>Jenis Pasien</label>
                                 <?php $selected_bpjs = old('bpjs') ? old('bpjs') : $sesi_bpjs; ?>
                                 <select name="bpjs" id="bpjs"
                                         class="form-control  <?= ($validation->hasError('bpjs')) ? 'is-invalid' : '' ?>">
                                     <option <?= $selected_bpjs == 'YA' ? 'selected' : ''; ?> value="YA">
-                                        YA
+                                        BPJS
                                     </option>
-                                    <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">TIDAK
+                                    <option <?= $selected_bpjs == 'TIDAK' ? 'selected' : ''; ?> value="TIDAK">UMUM
                                     </option>
                                 </select>
                                 <div class="invalid-feedback">

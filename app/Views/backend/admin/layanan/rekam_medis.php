@@ -118,8 +118,8 @@
                             <div class="col-sm-9">
                                 <input type="text" id="nomor_rekam" name="nomor_rekam"
                                        class="form-control <?= ($validation->hasError('nomor_rekam')) ? 'is-invalid' : '' ?>"
-                                       placeholder="Nomor Rekam Medis" required autofocus
-                                       value="<?= old('nomor_rekam') ? old('nomor_rekam') : '' ?>">
+                                       placeholder="Nomor Rekam Medis" required readonly
+                                       value="<?= old('nomor_rekam') ? old('nomor_rekam') : 'R-' . rand(100, 1000) . '-' . date('dmy') ?>">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('nomor_rekam'); ?>
                                 </div>
@@ -201,18 +201,18 @@
                         </div>
 
 
-                    </div>
-                    <footer class="card-footer">
-                        <div class="row justify-content-end text-right">
-                            <div class="col-sm-12">
-                                <button class="btn btn-primary" type="submit"><i
-                                            class="fa fa-save"></i>
-                                    Simpan
-                                </button>
-                            </div>
+                </div>
+                <footer class="card-footer">
+                    <div class="row justify-content-end text-right">
+                        <div class="col-sm-12">
+                            <button class="btn btn-primary" type="submit"><i
+                                        class="fa fa-save"></i>
+                                Simpan
+                            </button>
                         </div>
-                    </footer>
-                </section>
+                    </div>
+                </footer>
+            </section>
             </form>
         </div>
     </div>

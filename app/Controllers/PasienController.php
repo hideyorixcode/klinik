@@ -68,7 +68,7 @@ class PasienController extends BaseController
                 $row[] = $list->nopasien;
                 $row[] = $list->username;
                 $row[] = $list->nama;
-                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
+                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> BPJS' : '<i class="fas fa-check-circle text-secondary"></i> UMUM';
                 $row[] = $list->jk;
                 $row[] = $list->alamat;
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
@@ -104,7 +104,7 @@ class PasienController extends BaseController
                 $row[] = $list->nopasien;
                 $row[] = $list->username;
                 $row[] = $list->nama;
-                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
+                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> BPJS' : '<i class="fas fa-check-circle text-secondary"></i> UMUM';
                 $row[] = $list->jk;
                 $row[] = $list->alamat;
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
@@ -140,7 +140,7 @@ class PasienController extends BaseController
                 $row[] = $list->nopasien;
                 $row[] = $list->username;
                 $row[] = $list->nama;
-                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> YA' : '<i class="fas fa-times text-secondary"></i> TIDAK';
+                $row[] = $list->bpjs == 'YA' ? '<i class="fas fa-check-square text-primary"></i> BPJS' : '<i class="fas fa-check-circle text-secondary"></i> UMUM';
                 $row[] = $list->jk;
                 $row[] = $list->alamat;
                 $row[] = $list->active == 1 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-ban text-danger"></i>';
@@ -260,7 +260,7 @@ class PasienController extends BaseController
             'bpjs' => [
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'pilih tidak jika tidak menggunakan kartu BPJS'
+                    'required' => 'pilih jenis pasien (bpjs/umum)'
                 ]
             ],
 
